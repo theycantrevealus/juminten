@@ -1,0 +1,14 @@
+build/
+node_modules/
+docs/
+dist/
+.turbo/
+.vscode/
+**/*/dist/
+*.log
+*.tsbuildinfo
+.env
+coverage
+src/coverage/
+scenario/coverage/
+bin/

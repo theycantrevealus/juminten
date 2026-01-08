@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "esModuleInterop": true,
+    "noEmit": false,
+    "target": "es2017",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "noLib": false,
+    "noImplicitAny": false,
+    "skipLibCheck": true,
+    "incremental": true,
+    "baseUrl": "./",
+    "paths": {}
+  },
+  "include": ["src/**/*.ts", "test/**/*.ts", "scenario/**/*.ts"],
+  "exclude": ["node_modules"]
+}
