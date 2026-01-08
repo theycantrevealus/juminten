@@ -1,4 +1,9 @@
 {
+  "scripts": {
+    "prepack": "npm run build",
+    "prepare": "husky",
+    "release": "semantic-release"
+  },
   "devDependencies": {
     "@commitlint/cli": "^20.3.0",
     "@commitlint/config-conventional": "^20.3.0",
