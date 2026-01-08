@@ -7,15 +7,17 @@
     "experimentalDecorators": true,
     "esModuleInterop": true,
     "noEmit": false,
-    "target": "es2017",
+    "target": "es2020",
     "sourceMap": true,
     "outDir": "./dist",
     "noLib": false,
     "noImplicitAny": false,
     "skipLibCheck": true,
     "incremental": true,
-    "paths": {}
+    "paths": {
+      "@repository/*": ["./libs/infrastructure/database/*"]
+    }
   },
-  "include": ["apps/**/*.ts", "test/**/*.ts", "scenario/**/*.ts"],
-  "exclude": ["node_modules"]
+  "include": ["./apps/**/*.ts", "./libs/**/*.ts"],
+  "exclude": ["node_modules", "dist", "test", "**/*spec.ts"]
 }

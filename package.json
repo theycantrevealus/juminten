@@ -3,7 +3,9 @@
     "prepack": "npm run build",
     "test": "jest --detectOpenHandles --forceExit --verbose --runInBand --coverage --no-cache --passWithNoTests --config ./jest.e2e.json",
     "prepare": "husky",
-    "release": "semantic-release"
+    "release": "semantic-release",
+    "start:webpack:gateway_main": "nest build gateway_main --webpack --webpackPath ./webpack.config.js --watch",
+    "start:webpack:redeem": "nest build redeem --webpack --webpackPath ./webpack.config.js --watch"
   },
   "devDependencies": {
     "@commitlint/cli": "^20.3.0",
@@ -19,6 +21,7 @@
     "@types/supertest": "^6.0.3",
     "@typescript-eslint/eslint-plugin": "^8.52.0",
     "@typescript-eslint/parser": "^8.52.0",
+    "copy-webpack-plugin": "^13.0.1",
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-import": "^2.32.0",
@@ -27,6 +30,7 @@
     "husky": "^9.1.7",
     "jest": "^30.2.0",
     "prettier": "^3.7.4",
+    "run-script-webpack-plugin": "^0.2.3",
     "semantic-release": "^25.0.2",
     "supertest": "^7.2.2",
     "ts-jest": "^29.4.6",
@@ -40,6 +44,10 @@
     "@nestjs/core": "^11.1.11",
     "@nestjs/platform-fastify": "^11.1.11",
     "@nestjs/testing": "^11.1.11",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.3",
+    "couchbase": "^4.6.0",
+    "nestjs-couchbase": "file:nestjs-couchbase-1.8.1.tgz",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.2",
     "ts-loader": "^9.5.4",

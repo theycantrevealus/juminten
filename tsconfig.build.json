@@ -8,12 +8,12 @@
     "**/*.spec.ts",
     "**/*.test.ts"
   ],
-  "include": ["src/**/*"],
+  "include": ["apps/**/*.ts", "libs/**/*.ts", "test/**/*.ts"],
   "compilerOptions": {
     "outDir": "dist",
     "declaration": true,
     "declarationMap": true,
     "removeComments": false,
-    "rootDir": "src"
+    "rootDir": "apps"
   }
 }
