@@ -1,7 +1,8 @@
 {
   "scripts": {
     "prepack": "npm run build",
-    "test": "jest --detectOpenHandles --forceExit --verbose --runInBand --coverage --no-cache --passWithNoTests --config ./jest.e2e.json",
+    "test:unit": "jest --detectOpenHandles --forceExit --verbose --runInBand --coverage --no-cache --passWithNoTests --config ./jest.unit.json",
+    "test:e2e": "jest --detectOpenHandles --forceExit --verbose --runInBand --coverage --no-cache --passWithNoTests --config ./jest.e2e.json",
     "prepare": "husky",
     "release": "semantic-release",
     "start:webpack:gateway_main": "nest build gateway_main --webpack --webpackPath ./webpack.config.js --watch",

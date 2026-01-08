@@ -49,7 +49,4 @@ export class DTOAccountAdd {
 
   @IsString()
   legacy_user_id: string
-
-  @IsString()
-  location: string
 }

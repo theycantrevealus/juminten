@@ -13,7 +13,7 @@
   "transformIgnorePatterns": ["<rootDir>/node_modules/", "<rootDir>/dist/"],
   "collectCoverage": true,
   "collectCoverageFrom": [
-    "<rootDir>/src/**/*.{js,jsx,ts,tsx}",
+    "<rootDir>/apps/**/*.controller.{js,jsx,ts,tsx}",
     "!<rootDir>/node_modules/",
     "!<rootDir>/**/*.mock.{js,jsx,ts,tsx}"
   ],

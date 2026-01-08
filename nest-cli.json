@@ -17,15 +17,6 @@
       "compilerOptions": {
         "tsConfigPath": "apps/gateway_main/tsconfig.app.json"
       }
-    },
-    "redeem": {
-      "type": "application",
-      "root": "apps/redeem",
-      "entryFile": "main",
-      "sourceRoot": "apps/redeem/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/redeem/tsconfig.app.json"
-      }
     }
   }
 }

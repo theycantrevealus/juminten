@@ -52,7 +52,4 @@ export class Account {
 
   @Prop()
   legacy_user_id: string | null
-
-  @Prop()
-  location: object | any
 }
