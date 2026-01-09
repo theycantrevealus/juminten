@@ -48,12 +48,15 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.3",
     "couchbase": "^4.6.0",
+    "joi": "^18.0.2",
+    "kafkajs": "^2.2.4",
     "nestjs-couchbase": "^1.8.2",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.2",
     "ts-loader": "^9.5.4",
     "webpack": "^5.104.1",
     "webpack-cli": "^6.0.1",
-    "webpack-node-externals": "^3.0.0"
+    "webpack-node-externals": "^3.0.0",
+    "winston": "^3.19.0"
   }
 }
