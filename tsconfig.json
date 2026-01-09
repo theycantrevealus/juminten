@@ -15,7 +15,11 @@
     "skipLibCheck": true,
     "incremental": true,
     "paths": {
-      "@repository/*": ["./libs/infrastructure/database/*"]
+      "@configuration/*": ["./apps/configuration/*"],
+      "@repository/*": ["./libs/infrastructure/database/*"],
+      "@shared/*": ["./libs/shared/*"],
+      "@module/*": ["./libs/module/*"],
+      "@filter/*": ["./apps/filter/*"]
     }
   },
   "include": ["./apps/**/*.ts", "./libs/**/*.ts"],
