@@ -46,7 +46,11 @@ module.exports = (options, webpack) => {
     // mode: modeCheck !== '' ? 'development' : 'production',
     resolve: {
       alias: {
+        "@configuration": path.resolve(__dirname, "apps/configuration"),
         "@repository": path.resolve(__dirname, "libs/infrastructure/database"),
+        "@shared": path.resolve(__dirname, "libs/shared"),
+        "@module": path.resolve(__dirname, "libs/module"),
+        "@filter": path.resolve(__dirname, "apps/filter"),
       },
       extensions: [".tsx", ".ts", ".js"],
     },
