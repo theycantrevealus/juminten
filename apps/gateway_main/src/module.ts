@@ -2,17 +2,42 @@ import { Module } from "@nestjs/common"
 import { AccountModule } from "./account/account.module"
 import { ConfigModule, ConfigService } from "@nestjs/config"
 import { CouchBaseModule } from "nestjs-couchbase"
-
+import { WinstonModule } from "@module/logger/module"
+import { environmentIdentifier, environmentName } from "@shared/environment"
+import { WinstonCustomTransports } from "@module/logger/transport"
+import { ConfigSchema } from "@configuration/schema"
+import { CouchbaseConfig } from "@configuration/register/couchbase"
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: [`${environmentIdentifier}/couchbase.env`],
+      load: [CouchbaseConfig],
+      validationSchema: ConfigSchema,
+      validationOptions: {
+        allowUnknown: true,
+        abortEarly: true,
+      },
+    }),
+    WinstonModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => {
+        return {
+          handleRejections: true,
+          handleExceptions: true,
+          colorize: configService.get<boolean>("application.log.colorize"),
+          transports: WinstonCustomTransports[environmentName],
+        }
+      },
+      inject: [ConfigService],
+    }),
     CouchBaseModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
-        connectionString: configService.get("COUCHBASE_CONNECTION_STRING"),
-        username: configService.get("COUCHBASE_USERNAME"),
-        password: configService.get("COUCHBASE_PASSWORD"),
-        bucketName: configService.get("COUCHBASE_BUCKET"),
+        connectionString: configService.get("couchbase.connectionString"),
+        username: configService.get("couchbase.username"),
+        password: configService.get("couchbase.password"),
+        bucketName: configService.get("couchbase.bucket"),
       }),
       inject: [ConfigService],
     }),
