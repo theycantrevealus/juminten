@@ -7,6 +7,7 @@ import { environmentIdentifier, environmentName } from "@shared/environment"
 import { WinstonCustomTransports } from "@module/logger/transport"
 import { ConfigSchema } from "@configuration/schema"
 import { CouchbaseConfig } from "@configuration/register/couchbase"
+import { OAuthModule } from "./oauth/oauth.module"
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -42,6 +43,7 @@ import { CouchbaseConfig } from "@configuration/register/couchbase"
       inject: [ConfigService],
     }),
     AccountModule,
+    OAuthModule,
   ],
 })
 export class GatewayMainModule {}

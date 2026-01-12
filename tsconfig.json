@@ -22,6 +22,6 @@
       "@filter/*": ["./apps/filter/*"]
     }
   },
-  "include": ["./apps/**/*.ts", "./libs/**/*.ts"],
+  "include": ["./apps/**/*.ts", "./libs/**/*.ts", "./k6/**/*.ts"],
   "exclude": ["node_modules", "dist", "test"]
 }

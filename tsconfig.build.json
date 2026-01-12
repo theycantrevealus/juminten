@@ -8,7 +8,7 @@
     "**/*.spec.ts",
     "**/*.test.ts"
   ],
-  "include": ["apps/**/*.ts", "libs/**/*.ts", "test/**/*.ts"],
+  "include": ["apps/**/*.ts", "libs/**/*.ts", "test/**/*.ts", "k6/**/*.ts"],
   "compilerOptions": {
     "outDir": "dist",
     "declaration": true,
