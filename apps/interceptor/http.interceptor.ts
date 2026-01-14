@@ -10,6 +10,7 @@ import { Logger } from "winston"
 import { FastifyRequest } from "fastify"
 import { PATH_METADATA } from "@nestjs/common/constants"
 import { GlobalResponse } from "@shared/interface/global.response"
+import { responseCode } from "@shared/response.code"
 
 export async function httpInterceptor(
   context: ExecutionContext,
@@ -34,8 +35,8 @@ export async function httpInterceptor(
     tap(async (result: any) => {
       // TODO : Logger here if you need to log gateway request (ESB - Tere)
 
-      response.code(200).send({
-        code: "S00000",
+      response.code(responseCode.CODE_SUCCESS.httpCode).send({
+        code: responseCode.CODE_SUCCESS.customCode,
         message: "Success",
         payload: result,
       } satisfies GlobalResponse)

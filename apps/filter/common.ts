@@ -1,9 +1,8 @@
 import { ArgumentsHost, Catch, ExceptionFilter, Inject } from "@nestjs/common"
 import { Logger } from "winston"
 
-// import { errorHttpHandler } from "./http"
-// import { errorRpcHandler } from "./rpc"
 import { WINSTON_MODULE_PROVIDER } from "@module/logger/constant"
+import { errorHttpHandler } from "./http"
 
 @Catch()
 export class CommonErrorFilter implements ExceptionFilter {
@@ -12,10 +11,9 @@ export class CommonErrorFilter implements ExceptionFilter {
     private readonly logger: Logger,
   ) {}
   async catch(exception: any, host: ArgumentsHost) {
-    // if (host.getType() === "http") {
-    //   await errorHttpHandler(exception, host, this.logger)
-    // } else {
-    //   await errorRpcHandler(exception, host)
-    // }
+    if (host.getType() === "http") {
+      await errorHttpHandler(exception, host, this.logger)
+    } else {
+    }
   }
 }

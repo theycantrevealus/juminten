@@ -205,7 +205,7 @@ export const WinstonCustomTransports = {
       ),
     }),
     new winston.transports.File({
-      filename: "logs/core.log",
+      filename: "logs/e2e.core.log",
       level: "verbose",
       format: winston.format.combine(
         filterByContext("CoreService"),

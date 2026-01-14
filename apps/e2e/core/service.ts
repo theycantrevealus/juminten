@@ -1,10 +1,16 @@
 import { HttpService } from "@nestjs/axios"
-import { Inject, Injectable } from "@nestjs/common"
-import { AxiosRequestConfig, AxiosResponse } from "axios"
+import {
+  BadRequestException,
+  HttpStatus,
+  Inject,
+  Injectable,
+} from "@nestjs/common"
+import { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios"
 import { firstValueFrom } from "rxjs"
 import { DTOSignIn } from "../../gateway_main/src/oauth/oauth.dto.signin"
 import { WINSTON_MODULE_PROVIDER } from "@module/logger/constant"
 import { Logger } from "winston"
+import { CoreResponse } from "@shared/interface/core.response"
 
 @Injectable()
 export class CoreService {
@@ -29,40 +35,37 @@ export class CoreService {
           "CoreService",
         )
 
-        this.logger.verbose(
-          `${response.status} ${response.config.url} ${code} ${message}`,
-          "CoreService222",
-        )
-
         return response
       },
-      (error) => {
-        this.logger.error(`[ERROR] ${error.config?.url}`, error.response)
+      (error: AxiosError) => {
+        this.logger.error(
+          `[ERROR] ${error.config?.url} ${error.response}`,
+          "CoreService",
+        )
+
         return Promise.reject(error)
       },
     )
   }
 
   async get<T>(path: string, params?: any): Promise<T> {
-    try {
-      return (await firstValueFrom(this.http.get<T>(path, { params }))).data
-    } catch (error) {
-      this.logger.error(error)
-      throw error
-    }
+    return (await firstValueFrom(this.http.get<T>(path, { params }))).data
   }
 
   async post<T>(path: string, body: any): Promise<T> {
-    try {
-      return (await firstValueFrom(this.http.post<T>(path, body))).data
-    } catch (error) {
-      this.logger.error(`Error : ${error}`)
-      throw error
-    }
+    return (await firstValueFrom(this.http.post<T>(path, body))).data
   }
 
   async signIn<T>(payload: DTOSignIn): Promise<T> {
-    return await this.post("/gateway/v3.0/oauth/signin", payload)
+    try {
+      const response: CoreResponse = await this.post(
+        "/gateway/v3.0/oauth/signin",
+        payload,
+      )
+      return response.payload
+    } catch (error) {
+      throw new BadRequestException(error)
+    }
   }
 
   async earnInject<T>(payload: any): Promise<T> {
