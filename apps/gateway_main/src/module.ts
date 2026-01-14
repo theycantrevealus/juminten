@@ -26,7 +26,8 @@ import { OAuthModule } from "./oauth/oauth.module"
         return {
           handleRejections: true,
           handleExceptions: true,
-          colorize: configService.get<boolean>("application.log.colorize"),
+          colorize:
+            configService.get<boolean>("application.log.colorize") ?? true,
           transports: WinstonCustomTransports[environmentName],
         }
       },

@@ -1,5 +1,11 @@
 import { Provider, Type } from "@nestjs/common"
-import { createLogger, Logger, LoggerOptions } from "winston"
+import {
+  createLogger,
+  format,
+  Logger,
+  LoggerOptions,
+  transports,
+} from "winston"
 
 import { WinstonLogger } from "./class"
 import {

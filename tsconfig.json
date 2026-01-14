@@ -17,6 +17,8 @@
     "paths": {
       "@configuration/*": ["./apps/configuration/*"],
       "@repository/*": ["./libs/infrastructure/database/*"],
+      "@interceptor/*": ["./apps/interceptor/*"],
+      "@util/*": ["./apps/util/*"],
       "@shared/*": ["./libs/shared/*"],
       "@module/*": ["./libs/module/*"],
       "@filter/*": ["./apps/filter/*"]

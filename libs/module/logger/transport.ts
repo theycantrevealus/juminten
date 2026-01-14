@@ -136,14 +136,14 @@ function loggerParser(data) {
       sPad.account,
       `${parsedResponseHorasLogging?.account?.last_name ?? "SYSTEM"}, ${
         parsedResponseHorasLogging?.account?.first_name ?? "SYSTEM"
-      }` ?? "-",
+      }`,
       false,
     )
     const httpCode = pad(
       sPad.httpCode,
       `${parsedResponseHorasLogging?.result?.statusCode?.classCode ?? "xxx"}_${
         parsedResponseHorasLogging?.result?.statusCode?.customCode ?? "xxx"
-      }` ?? "-",
+      }`,
       false,
     )
     return `${pad(sPad.level, data.level, true)} ${pad(
@@ -179,6 +179,19 @@ function loggerParser(data) {
   }
 }
 
+const filterByContext = (expectedContext: string) =>
+  winston.format((info) => {
+    const splat = info[Symbol.for("splat")]
+    const context = Array.isArray(splat) ? splat[0] : undefined
+
+    if (context !== expectedContext) {
+      return false
+    }
+
+    info.context = context
+    return info
+  })()
+
 export const WinstonCustomTransports = {
   development: [
     new winston.transports.Console({
@@ -190,6 +203,24 @@ export const WinstonCustomTransports = {
           return loggerParser(data)
         }),
       ),
+    }),
+    new winston.transports.File({
+      filename: "logs/core.log",
+      level: "verbose",
+      format: winston.format.combine(
+        filterByContext("CoreService"),
+        winston.format.colorize(),
+        winston.format.timestamp({ format: "YYYY-MM-DD HH:mm:ss.SSS" }),
+        winston.format.printf((data) => {
+          return loggerParser(data)
+        }),
+      ),
+      // format: winston.format((info) => {
+      //   const splat = info[Symbol.for("splat")]
+      //   const context = Array.isArray(splat) ? splat[0] : undefined
+
+      //   return context === "CoreService" ? info : false
+      // })(),
     }),
     // new winston.transports.File({
     //   filename: `logs/journal.log`,

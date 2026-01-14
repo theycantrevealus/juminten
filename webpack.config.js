@@ -47,6 +47,8 @@ module.exports = (options, webpack) => {
     resolve: {
       alias: {
         "@configuration": path.resolve(__dirname, "apps/configuration"),
+        "@interceptor": path.resolve(__dirname, "apps/interceptor"),
+        "@util": path.resolve(__dirname, "apps/util"),
         "@repository": path.resolve(__dirname, "libs/infrastructure/database"),
         "@shared": path.resolve(__dirname, "libs/shared"),
         "@module": path.resolve(__dirname, "libs/module"),
