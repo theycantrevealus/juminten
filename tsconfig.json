@@ -15,15 +15,38 @@
     "skipLibCheck": true,
     "incremental": true,
     "paths": {
-      "@configuration/*": ["./apps/configuration/*"],
-      "@repository/*": ["./libs/infrastructure/database/*"],
-      "@interceptor/*": ["./apps/interceptor/*"],
-      "@util/*": ["./apps/util/*"],
-      "@shared/*": ["./libs/shared/*"],
-      "@module/*": ["./libs/module/*"],
-      "@filter/*": ["./apps/filter/*"]
-    }
+      "@configuration/*": [
+        "./apps/configuration/*"
+      ],
+      "@repository/*": [
+        "./libs/infrastructure/database/*"
+      ],
+      "@interceptor/*": [
+        "./apps/interceptor/*"
+      ],
+      "@util/*": [
+        "./apps/util/*"
+      ],
+      "@shared/*": [
+        "./libs/shared/*"
+      ],
+      "@module/*": [
+        "./libs/module/*"
+      ],
+      "@filter/*": [
+        "./apps/filter/*"
+      ]
+    },
+    "baseUrl": "./"
   },
-  "include": ["./apps/**/*.ts", "./libs/**/*.ts", "./k6/**/*.ts"],
-  "exclude": ["node_modules", "dist", "test"]
+  "include": [
+    "./apps/**/*.ts",
+    "./libs/**/*.ts",
+    "./k6/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "test"
+  ]
 }
