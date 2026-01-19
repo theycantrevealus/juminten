@@ -280,110 +280,81 @@ export class KafkaService implements OnModuleInit, OnModuleDestroy {
     this.consumer.run({
       ...runConfig,
       autoCommit: false,
-      // partitionsConsumedConcurrently: 1,
-      // eachBatch: async ({
-      //   batch,
-      //   resolveOffset,
-      //   heartbeat,
-      //   // commitOffsetsIfNecessary,
-      //   // uncommittedOffsets,
-      //   // isRunning,
-      //   // isStale,
-      //   // pause,
-      // }) => {
-      //   const TM = new TimeManagement()
-      //   const topic = batch.topic
-      //   const partition = batch.partition
 
-      //   for (const message of batch.messages) {
-      //     const objectRef = SUBSCRIBER_OBJECT_MAP.get(topic)
-      //     const callback = SUBSCRIBER_MAP.get(topic)
-      //     const { timestamp, response, offset, key, headers } =
-      //       await this.deserializer.deserialize(message, { topic })
-
-      //     const dataSet: HorasLogging = {
-      //       ip: `${topic}/${partition}/${offset}`,
-      //       path: topic,
-      //       url: topic,
-      //       method: 'KAFKA',
-      //       takeTime: Date.now() - timestamp,
-      //       payload: {
-      //         response: response,
-      //         key: key,
-      //       },
-      //       result: response,
-      //       account: headers,
-      //       time: TM.getTimezone('Asia/Jakarta'),
-      //     }
-
-      //     try {
-      //       this.logger.verbose(dataSet)
-      //       await callback.apply(objectRef, [
-      //         response,
-      //         key,
-      //         offset,
-      //         timestamp,
-      //         partition,
-      //         headers,
-      //         this.consumer,
-      //       ])
-      //     } catch (e) {
-      //       dataSet.result = e.message
-      //       this.logger.error(dataSet)
-      //     }
-
-      //     resolveOffset(offset)
-      //     await heartbeat()
-      //   }
-      // },
-
-      eachMessage: async ({ topic, partition, message }) => {
-        const objectRef = SUBSCRIBER_OBJECT_MAP.get(topic)
-        const callback = SUBSCRIBER_MAP.get(topic)
-        const { timestamp, response, offset, key, headers } =
-          await this.deserializer.deserialize(message, { topic })
-
+      partitionsConsumedConcurrently: 10,
+      eachBatch: async ({
+        batch,
+        resolveOffset,
+        heartbeat,
+        commitOffsetsIfNecessary,
+        // uncommittedOffsets,
+        isRunning,
+        isStale,
+        // pause,
+      }) => {
         const TM = new TimeManagement()
-        const dataSet = {
-          ip: `${topic}/${partition}/${offset}`,
-          path: topic,
-          url: topic,
-          method: "KAFKA",
-          takeTime: Date.now() - timestamp,
-          payload: {
-            response: response,
-            key: key,
-          },
-          result: response,
-          account: headers,
-          time: TM.getTimezone("Asia/Jakarta"),
+        const topic = batch.topic
+        const partition = batch.partition
+
+        for (const message of batch.messages) {
+          if (!isRunning() || isStale()) break
+
+          const objectRef = SUBSCRIBER_OBJECT_MAP.get(topic)
+          const callback = SUBSCRIBER_MAP.get(topic)
+          const { timestamp, offset, key, headers } = message
+
+          try {
+            await callback.apply(objectRef, [
+              message.value?.toString("utf8"),
+              key?.toString("utf8"),
+              offset,
+              timestamp,
+              partition,
+              headers,
+              this.consumer,
+            ])
+          } catch (e) {
+            console.error(e)
+          }
+
+          resolveOffset(offset)
+          await heartbeat()
         }
 
-        try {
-          this.logger.verbose(dataSet)
-          await callback.apply(objectRef, [
-            response,
-            key,
-            offset,
-            timestamp,
-            partition,
-            topic,
-            this.consumer,
-            headers,
-          ])
-        } catch (e) {
-          dataSet.result = e.message
-          this.logger.error(dataSet)
-        }
-
-        // await this.consumer.commitOffsets([
-        //   {
-        //     topic: topic,
-        //     partition: partition,
-        //     offset: (parseInt(offset) + 1).toString(),
-        //   },
-        // ])
+        await commitOffsetsIfNecessary()
       },
+
+      // eachMessage: async ({ topic, partition, message }) => {
+      //   const objectRef = SUBSCRIBER_OBJECT_MAP.get(topic)
+      //   const callback = SUBSCRIBER_MAP.get(topic)
+      //   // const { timestamp, response, offset, key, headers } =
+      //   //   await this.deserializer.deserialize(message, { topic })
+
+      //   const { timestamp, offset, key, headers } = message
+
+      //   try {
+      //     await callback.apply(objectRef, [
+      //       message.value?.toString("utf8"),
+      //       key,
+      //       offset,
+      //       timestamp,
+      //       partition,
+      //       topic,
+      //       this.consumer,
+      //       headers,
+      //     ])
+      //   } catch (e) {
+      //     console.error(e)
+      //   }
+
+      //   // await this.consumer.commitOffsets([
+      //   //   {
+      //   //     topic: topic,
+      //   //     partition: partition,
+      //   //     offset: (parseInt(offset) + 1).toString(),
+      //   //   },
+      //   // ])
+      // },
     })
 
     if (this.options.seek !== undefined) {

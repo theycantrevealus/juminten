@@ -1,4 +1,4 @@
-import { Module } from "@nestjs/common"
+import { Module, OnApplicationShutdown } from "@nestjs/common"
 import { ConsumerRedeemController } from "./consumer_redeem.controller"
 import { ConsumerRedeemService } from "./consumer_redeem.service"
 import { DecoratorProcessorService } from "@module/kafka/decorator"
@@ -77,4 +77,8 @@ import { WinstonCustomTransports } from "@module/logger/transport"
   providers: [DecoratorProcessorService, ConsumerRedeemService],
   exports: [DecoratorProcessorService],
 })
-export class ConsumerRedeemModule {}
+export class ConsumerRedeemModule implements OnApplicationShutdown {
+  onApplicationShutdown(signal?: string) {
+    console.log("Application shutdown")
+  }
+}

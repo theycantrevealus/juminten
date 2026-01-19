@@ -24,7 +24,7 @@ export class ConsumerRedeemController implements OnModuleInit {
     consumer: Consumer,
     headers: any,
   ) {
-    console.log(`Topic     : ${topic}`)
+    console.log(`Topic     : ${JSON.stringify(topic, null, 2)}`)
     console.log(`Key       : ${JSON.stringify(key, null, 2)}`)
     console.log(`Offset    : ${offset}`)
     console.log(`Timestamp : ${timestamp}`)
