@@ -8,12 +8,18 @@ import { WinstonCustomTransports } from "@module/logger/transport"
 import { ConfigSchema } from "@configuration/schema"
 import { CouchbaseConfig } from "@configuration/register/couchbase"
 import { OAuthModule } from "./oauth/oauth.module"
+import { LOVModule } from "./lov/lov.module"
+import { CoreModule } from "@e2e/core/module"
+import { CoreConfig } from "@configuration/register/core"
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: [`${environmentIdentifier}/couchbase.env`],
-      load: [CouchbaseConfig],
+      envFilePath: [
+        `${environmentIdentifier}/couchbase.env`,
+        `${environmentIdentifier}/core.env`,
+      ],
+      load: [CouchbaseConfig, CoreConfig],
       validationSchema: ConfigSchema,
       validationOptions: {
         allowUnknown: true,
@@ -22,15 +28,13 @@ import { OAuthModule } from "./oauth/oauth.module"
     }),
     WinstonModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => {
-        return {
-          handleRejections: true,
-          handleExceptions: true,
-          colorize:
-            configService.get<boolean>("application.log.colorize") ?? true,
-          transports: WinstonCustomTransports[environmentName],
-        }
-      },
+      useFactory: (configService: ConfigService) => ({
+        handleRejections: true,
+        handleExceptions: true,
+        colorize:
+          configService.get<boolean>("application.log.colorize") ?? true,
+        transports: WinstonCustomTransports[environmentName],
+      }),
       inject: [ConfigService],
     }),
     CouchBaseModule.forRootAsync({
@@ -43,8 +47,17 @@ import { OAuthModule } from "./oauth/oauth.module"
       }),
       inject: [ConfigService],
     }),
+    CoreModule.registerAsync({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        baseURL: configService.get<string>("core.url"),
+        timeout: 3000,
+      }),
+      inject: [ConfigService],
+    }),
     AccountModule,
     OAuthModule,
+    LOVModule,
   ],
 })
 export class GatewayMainModule {}

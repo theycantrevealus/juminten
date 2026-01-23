@@ -4,12 +4,7 @@ import { OauthService } from "./oauth.service"
 import { OAuthController } from "./oauth.controller"
 
 @Module({
-  imports: [
-    CoreModule.register({
-      baseURL: "https://api.developer.wegiv.co",
-      timeout: 3000,
-    }),
-  ],
+  imports: [],
   controllers: [OAuthController],
   providers: [OauthService],
   exports: [OauthService],

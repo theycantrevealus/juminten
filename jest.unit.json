@@ -8,7 +8,7 @@
   "testEnvironment": "node",
   "testRegex": ".*\\.unit.spec\\.ts$",
   "moduleNameMapper": {
-    "^@repository(.*)$": "<rootDir>/libs/infrastructure/database$1"
+    "^@database(.*)$": "<rootDir>/libs/infrastructure/database$1"
   },
   "transform": {
     "^.+\\.(t|j)s$": "ts-jest"

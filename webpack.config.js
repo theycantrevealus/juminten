@@ -45,11 +45,15 @@ module.exports = (options, webpack) => {
     // watch: modeCheck === '' || modeCheck === 'development',
     // mode: modeCheck !== '' ? 'development' : 'production',
     resolve: {
+      modules: [path.resolve(__dirname), "node_modules"],
       alias: {
         "@configuration": path.resolve(__dirname, "apps/configuration"),
+        "@decorator": path.resolve(__dirname, "apps/decorator"),
+        "@e2e": path.resolve(__dirname, "apps/e2e"),
+        "@guard": path.resolve(__dirname, "apps/guard"),
         "@interceptor": path.resolve(__dirname, "apps/interceptor"),
         "@util": path.resolve(__dirname, "apps/util"),
-        "@repository": path.resolve(__dirname, "libs/infrastructure/database"),
+        "@database": path.resolve(__dirname, "libs/infrastructure/database"),
         "@shared": path.resolve(__dirname, "libs/shared"),
         "@module": path.resolve(__dirname, "libs/module"),
         "@filter": path.resolve(__dirname, "apps/filter"),

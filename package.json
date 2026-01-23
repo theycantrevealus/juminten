@@ -46,6 +46,7 @@
     "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.1.11",
     "@nestjs/microservices": "^11.1.12",
+    "@nestjs/passport": "^11.0.5",
     "@nestjs/platform-fastify": "^11.1.11",
     "@nestjs/testing": "^11.1.11",
     "axios": "^1.13.2",

@@ -35,11 +35,22 @@ export async function httpInterceptor(
     tap(async (result: any) => {
       // TODO : Logger here if you need to log gateway request (ESB - Tere)
 
-      response.code(responseCode.CODE_SUCCESS.httpCode).send({
-        code: responseCode.CODE_SUCCESS.customCode,
-        message: "Success",
-        payload: result,
-      } satisfies GlobalResponse)
+      if (path.toString() === "signin") {
+        /**
+         * Because sign in endpoint has no payload parameter by defined on IFA
+         */
+        response.code(responseCode.CODE_SUCCESS.httpCode).send({
+          code: responseCode.CODE_SUCCESS.customCode,
+          message: "Success",
+          ...result,
+        })
+      } else {
+        response.code(responseCode.CODE_SUCCESS.httpCode).send({
+          code: responseCode.CODE_SUCCESS.customCode,
+          message: "Success",
+          payload: result,
+        } satisfies GlobalResponse)
+      }
     }),
   )
 }

@@ -1,4 +1,4 @@
-import { Account } from "@repository/couchbase/model/account.model"
+import { Account } from "@database/couchbase/model/account.model"
 
 export const mockAccount = (
   user_id = "xxx",

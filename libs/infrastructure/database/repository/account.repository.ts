@@ -1,5 +1,5 @@
+import { Account } from "@database/couchbase/model/account.model"
 import { Injectable } from "@nestjs/common"
-import { Account } from "@repository/couchbase/model/account.model"
 import { CouchBaseModel, InjectModel } from "nestjs-couchbase"
 
 @Injectable()

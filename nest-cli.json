@@ -4,6 +4,7 @@
   "compilerOptions": {
     "outDir": "dist",
     "webpack": true,
+    "webpackConfigPath": "webpack.config.js",
     "tsConfigPath": "apps/gateway_main/tsconfig.app.json"
   },
   "monorepo": true,

@@ -1,6 +1,6 @@
 import { Inject, Injectable } from "@nestjs/common"
-import { RepositoryAccount } from "@repository/repository/account.repository"
 import { DTOAccountAdd } from "./account.dto.add"
+import { RepositoryAccount } from "@database/repository/account.repository"
 
 @Injectable()
 export class AccountService {

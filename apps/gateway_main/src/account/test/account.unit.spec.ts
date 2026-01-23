@@ -1,10 +1,10 @@
 import { Test, TestingModule } from "@nestjs/testing"
 import { AccountService } from "../account.service"
 import { CouchBaseModel, getModelToken } from "nestjs-couchbase"
-import { Account } from "@repository/couchbase/model/account.model"
 import { mockAccountModel, mockAccountRepository } from "./mock/account.mock"
-import { RepositoryAccount } from "@repository/repository/account.repository"
 import { DTOAccountAdd } from "../account.dto.add"
+import { RepositoryAccount } from "@database/repository/account.repository"
+import { Account } from "@database/couchbase/model/account.model"
 
 describe("Account Service", () => {
   let accountService: AccountService
