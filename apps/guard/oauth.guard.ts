@@ -1,4 +1,4 @@
-import { CoreOauthService } from "@e2e/core/oauth.service"
+import { CoreOauthService } from "apps/integration/core/oauth.service"
 import {
   ExecutionContext,
   ForbiddenException,

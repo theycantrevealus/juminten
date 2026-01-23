@@ -9,7 +9,7 @@ import { ConfigSchema } from "@configuration/schema"
 import { CouchbaseConfig } from "@configuration/register/couchbase"
 import { OAuthModule } from "./oauth/oauth.module"
 import { LOVModule } from "./lov/lov.module"
-import { CoreModule } from "@e2e/core/module"
+import { CoreModule } from "apps/integration/core/module"
 import { CoreConfig } from "@configuration/register/core"
 @Module({
   imports: [

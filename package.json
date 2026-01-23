@@ -2,6 +2,7 @@
   "scripts": {
     "prepack": "npm run build",
     "test:unit": "jest --detectOpenHandles --forceExit --verbose --runInBand --coverage --no-cache --passWithNoTests --config ./jest.unit.json",
+    "test:unit:integration:core": "jest --detectOpenHandles --forceExit --verbose --runInBand --coverage --no-cache --passWithNoTests --config ./jest.unit.integration.core.json",
     "test:e2e": "jest --detectOpenHandles --forceExit --verbose --runInBand --coverage --no-cache --passWithNoTests --config ./jest.e2e.json",
     "prepare": "husky",
     "release": "semantic-release",

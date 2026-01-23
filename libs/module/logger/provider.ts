@@ -48,10 +48,11 @@ export function createWinstonProviders(
 
 export function createWinstonAsyncProviders(
   options: WinstonModuleAsyncOptions,
+  providerName: string,
 ): Provider[] {
   const providers: Provider[] = [
     {
-      provide: WINSTON_MODULE_PROVIDER,
+      provide: providerName,
       useFactory: (loggerOpts: LoggerOptions) => createLogger(loggerOpts),
       inject: [WINSTON_MODULE_OPTIONS],
     },
@@ -60,7 +61,7 @@ export function createWinstonAsyncProviders(
       useFactory: (logger: Logger) => {
         return new WinstonLogger(logger)
       },
-      inject: [WINSTON_MODULE_PROVIDER],
+      inject: [providerName],
     },
   ]
 

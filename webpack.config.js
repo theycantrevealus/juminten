@@ -49,7 +49,7 @@ module.exports = (options, webpack) => {
       alias: {
         "@configuration": path.resolve(__dirname, "apps/configuration"),
         "@decorator": path.resolve(__dirname, "apps/decorator"),
-        "@e2e": path.resolve(__dirname, "apps/e2e"),
+        "@integration": path.resolve(__dirname, "apps/integration"),
         "@guard": path.resolve(__dirname, "apps/guard"),
         "@interceptor": path.resolve(__dirname, "apps/interceptor"),
         "@util": path.resolve(__dirname, "apps/util"),
@@ -101,4 +101,8 @@ module.exports = (options, webpack) => {
   }
 
   return option
+}
+
+if (module.hot) {
+  module.hot.accept()
 }

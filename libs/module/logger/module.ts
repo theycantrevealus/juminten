@@ -6,6 +6,7 @@ import {
   createWinstonAsyncProviders,
   createWinstonProviders,
 } from "./provider"
+import { WINSTON_MODULE_PROVIDER } from "./constant"
 
 @Global()
 @Module({})
@@ -22,8 +23,12 @@ export class WinstonModule {
 
   public static forRootAsync(
     options: WinstonModuleAsyncOptions,
+    providerName?: string,
   ): DynamicModule {
-    const providers = createWinstonAsyncProviders(options)
+    const providers = createWinstonAsyncProviders(
+      options,
+      providerName ?? WINSTON_MODULE_PROVIDER,
+    )
 
     return {
       module: WinstonModule,

@@ -1,13 +1,15 @@
-import { BadRequestException, Injectable } from "@nestjs/common"
+import { BadRequestException, Inject, Injectable } from "@nestjs/common"
 import { CoreService } from "./service"
 import { CoreResponse } from "@shared/interface/core.response"
-import { DTOSignIn } from "apps/gateway_main/src/oauth/oauth.dto.signin"
+import { ContractSignIn } from "./contract/signin.contract"
 
 @Injectable()
-export class CoreOauthService extends CoreService {
-  async signIn<T>(payload: DTOSignIn): Promise<T> {
+export class CoreOauthService {
+  constructor(private readonly coreService: CoreService) {}
+
+  async signIn<T>(payload: ContractSignIn): Promise<T> {
     try {
-      const response: CoreResponse = await this.post(
+      const response: CoreResponse = await this.coreService.post(
         "/gateway/v3.0/oauth/signin",
         payload,
       )
@@ -19,7 +21,7 @@ export class CoreOauthService extends CoreService {
 
   async authenticateBusiness<T>(token: string): Promise<T> {
     try {
-      const response: CoreResponse = await this.get(
+      const response: CoreResponse = await this.coreService.get(
         "/gateway/v3.0/business/home",
         {
           headers: {

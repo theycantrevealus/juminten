@@ -4,7 +4,7 @@
   "moduleDirectories": ["node_modules"],
   "moduleFileExtensions": ["js", "json", "ts"],
   "rootDir": ".",
-  "roots": ["<rootDir>/apps/"],
+  "roots": ["<rootDir>/apps/integration/core"],
   "testEnvironment": "node",
   "testRegex": ".*\\.unit.spec\\.ts$",
   "moduleNameMapper": {
@@ -31,9 +31,9 @@
   ],
   "coveragePathIgnorePatterns": [
     "<rootDir>/node_modules/",
-    ".(e2e|unit)-spec.(t|j)s",
+    ".(e2e|unit).spec.(t|j)s",
     ".controller.(t|j)s",
-    "assessment.form.service.(t|j)s",
+    ".mock.(t|j)s",
     ".dto.(t|j)s",
     ".provider.(t|j)s",
     ".batch.(t|j)s",

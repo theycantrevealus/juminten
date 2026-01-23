@@ -7,13 +7,13 @@ import {
   Version,
 } from "@nestjs/common"
 import { DTOSignIn } from "./oauth.dto.signin"
-import { OauthService } from "./oauth.service"
+import { OAuthService } from "./oauth.service"
 import { GeneralInterceptor } from "@interceptor/general.interceptor"
 
 @Controller("oauth")
 export class OAuthController {
   constructor(
-    @Inject(OauthService) private readonly oauthService: OauthService,
+    @Inject(OAuthService) private readonly oauthService: OAuthService,
   ) {}
 
   @Post("signin")

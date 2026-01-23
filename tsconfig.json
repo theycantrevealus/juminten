@@ -18,7 +18,7 @@
       "@configuration/*": ["./apps/configuration/*"],
       "@decorator/*": ["./apps/decorator/*"],
       "@guard/*": ["./apps/guard/*"],
-      "@e2e/*": ["./apps/e2e/*"],
+      "@integration/*": ["apps/integration/*"],
       "@database/*": ["./libs/infrastructure/database/*"],
       "@interceptor/*": ["./apps/interceptor/*"],
       "@util/*": ["./apps/util/*"],
