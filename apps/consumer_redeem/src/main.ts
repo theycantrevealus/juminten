@@ -6,7 +6,7 @@ import { KAFKA_TOPICS } from "@util/constant"
 import { ConsumerRedeemController } from "./consumer_redeem.controller"
 
 async function bootstrap() {
-  const app = await NestFactory.create(ConsumerRedeemModule, { logger: false })
+  const app = await NestFactory.create(ConsumerRedeemModule)
 
   app.connectMicroservice<MicroserviceOptions>(
     {

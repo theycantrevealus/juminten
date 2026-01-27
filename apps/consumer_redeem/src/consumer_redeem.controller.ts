@@ -7,7 +7,10 @@ import { Consumer } from "kafkajs"
 
 @Controller()
 export class ConsumerRedeemController implements OnModuleInit {
-  constructor(@Inject("REDEEM_SERVICE") private client: KafkaService) {}
+  constructor(
+    @Inject("REDEEM_SERVICE") private client: KafkaService,
+    private readonly redeemService: ConsumerRedeemService,
+  ) {}
 
   onModuleInit(): void {
     this.client.subscribeToResponseOf("redeem", this)
@@ -31,5 +34,8 @@ export class ConsumerRedeemController implements OnModuleInit {
     console.log(`Partition : ${partition}`)
     console.log(`Payload   : ${JSON.stringify(payload, null, 2)}`)
     console.log(`Header    : ${JSON.stringify(headers, null, 2)}`)
+
+    // await this.redeemService.processEligi(payload)
+    await this.redeemService.processEligi(payload)
   }
 }

@@ -10,6 +10,7 @@ export class KafkaModuleOptionsProvider {
   ) {}
 
   getOptionsByName(name: string) {
+    console.log(name)
     return this.kafkaModuleOptions.find((x) => x.name === name).options
   }
 }

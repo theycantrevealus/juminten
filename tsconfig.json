@@ -19,11 +19,11 @@
       "@decorator/*": ["./apps/decorator/*"],
       "@guard/*": ["./apps/guard/*"],
       "@integration/*": ["apps/integration/*"],
-      "@database/*": ["./libs/infrastructure/database/*"],
+      "@database/*": ["./apps/libs/infrastructure/database/*"],
       "@interceptor/*": ["./apps/interceptor/*"],
       "@util/*": ["./apps/util/*"],
-      "@shared/*": ["./libs/shared/*"],
-      "@module/*": ["./libs/module/*"],
+      "@shared/*": ["./apps/libs/shared/*"],
+      "@module/*": ["./apps/libs/module/*"],
       "@filter/*": ["./apps/filter/*"]
     },
     "baseUrl": "./"

@@ -57,7 +57,7 @@ import { CoreConfig } from "@configuration/register/core"
     }),
     AccountModule,
     OAuthModule,
-    LOVModule,
+    // LOVModule,
   ],
 })
 export class GatewayMainModule {}

@@ -24,6 +24,8 @@ export interface KafkaModuleOption {
     seek?: Record<string, number | "earliest" | Date>
     autoConnect?: boolean
     producerModeOnly: boolean
+    consumerMode?: "message" | "batch"
+    partitionsConsumedConcurrently: number
   }
 }
 

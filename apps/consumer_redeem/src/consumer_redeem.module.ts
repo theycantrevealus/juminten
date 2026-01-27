@@ -30,7 +30,7 @@ import { WinstonCustomTransports } from "@module/logger/transport"
       },
       inject: [ConfigService],
     }),
-    KafkaModule.registerAsync(["REDEEM_SERVICE"], {
+    KafkaModule.registerAsync(["REDEEM_SERVICE", "ELIGIBILITY_SERVICE"], {
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {
         console.log(
@@ -63,6 +63,26 @@ import { WinstonCustomTransports } from "@module/logger/transport"
                 clientId: configService.get<string>(
                   "kafka.redeem.client.clientId",
                 ),
+                brokers: configService.get<string[]>(
+                  "kafka.redeem.client.brokers",
+                ),
+              },
+            },
+          },
+          {
+            name: "ELIGIBILITY_SERVICE",
+            options: {
+              producerModeOnly: true,
+              consumer: {
+                groupId: "consumer_eligibility",
+              },
+              producer: {
+                allowAutoTopicCreation: true,
+                idempotent: true,
+                maxInFlightRequests: 1,
+              },
+              client: {
+                clientId: "EligiExample",
                 brokers: configService.get<string[]>(
                   "kafka.redeem.client.brokers",
                 ),

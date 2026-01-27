@@ -4,11 +4,14 @@ import {
   ForbiddenException,
   Inject,
   Injectable,
+  UnauthorizedException,
 } from "@nestjs/common"
 import { ConfigService } from "@nestjs/config"
 import { Reflector } from "@nestjs/core"
 import { AuthGuard } from "@nestjs/passport"
 import { environmentName } from "@shared/environment"
+import { Cache, CACHE_MANAGER } from "@nestjs/cache-manager"
+import { IUser } from "@shared/interface/core.account"
 
 @Injectable()
 export class OAuth2Guard extends AuthGuard("jwt") {
@@ -19,6 +22,8 @@ export class OAuth2Guard extends AuthGuard("jwt") {
     @Inject(ConfigService) private readonly configService: ConfigService,
 
     private readonly coreOAuthService: CoreOauthService,
+
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {
     super()
   }
@@ -45,17 +50,20 @@ export class OAuth2Guard extends AuthGuard("jwt") {
     const token = request.headers.authorization
 
     if (!token) {
-      throw new ForbiddenException([{ isTokenMissing: "Token is Required" }])
+      throw new ForbiddenException("Token is required")
     }
 
-    let account
+    let account: IUser
 
-    if (environmentName === "development") {
-      await this.coreOAuthService.authenticateBusiness(token).then((data) => {
-        //
-      })
+    account =
+      environmentName === "development"
+        ? await this.coreOAuthService.authenticateBusiness(token)
+        : await this.cacheManager.get<IUser>(token)
+
+    if (account) {
+      const authorizes = account.authorizes
     } else {
-      //
+      throw new UnauthorizedException("Account is not authorized")
     }
 
     return false

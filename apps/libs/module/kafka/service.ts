@@ -166,8 +166,16 @@ export class KafkaService implements OnModuleInit, OnModuleDestroy {
         return
       }
 
-      const serializedPacket = await this.serializer.serialize(message)
-      return await this.producer.send(serializedPacket)
+      // const serializedPacket = await this.serializer.serialize(message)
+      // return await this.producer.send(serializedPacket)
+
+      return await this.producer.send({
+        topic: message.topic,
+        messages: message.messages,
+        acks: message.acks,
+        timeout: message.timeout,
+        compression: message.compression,
+      })
     } catch (e) {
       throw e
     }
@@ -211,7 +219,7 @@ export class KafkaService implements OnModuleInit, OnModuleDestroy {
     }
 
     const tx = await producer.transaction()
-    const _this = this
+    // const _this = this
     const retval: KafkaTransaction = {
       abort(): Promise<void> {
         return tx.abort()
@@ -223,8 +231,15 @@ export class KafkaService implements OnModuleInit, OnModuleDestroy {
         return tx.isActive()
       },
       async send(message: KafkaMessageSend): Promise<RecordMetadata[]> {
-        const serializedPacket = await _this.serializer.serialize(message)
-        return await tx.send(serializedPacket)
+        // const serializedPacket = await _this.serializer.serialize(message)
+        return await tx.send({
+          topic: message.topic,
+          messages: message.messages,
+          acks: message.acks,
+          timeout: message.timeout,
+          compression: message.compression,
+        })
+        // return await tx.send(serializedPacket)
       },
       sendOffsets(
         offsets: Offsets & { consumerGroupId: string },
@@ -277,11 +292,15 @@ export class KafkaService implements OnModuleInit, OnModuleDestroy {
     const runConfig = this.options.consumerRunConfig
       ? this.options.consumerRunConfig
       : {}
+    if (this.options.consumerMode === "message") {
+    } else {
+    }
     this.consumer.run({
       ...runConfig,
       autoCommit: false,
 
-      partitionsConsumedConcurrently: 10,
+      partitionsConsumedConcurrently:
+        this.options.partitionsConsumedConcurrently,
       eachBatch: async ({
         batch,
         resolveOffset,
