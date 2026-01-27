@@ -12,12 +12,12 @@
     "^@decorator(.*)$": "<rootDir>/apps/decorator$1",
     "^@guard(.*)$": "<rootDir>/apps/guard$1",
     "^@integration(.*)$": "<rootDir>/apps/integration$1",
-    "^@database(.*)$": "<rootDir>/libs/infrastructure/database$1",
+    "^@database(.*)$": "<rootDir>/apps/libs/infrastructure/database$1",
     "^@interceptor(.*)$": "<rootDir>/apps/interceptor$1",
     "^@util(.*)$": "<rootDir>/apps/util$1",
-    "^@shared(.*)$": "<rootDir>/libs/shared$1",
-    "^@module(.*)$": "<rootDir>/libs/module$1",
-    "^@filter(.*)$": "<rootDir>/libs/filter$1"
+    "^@shared(.*)$": "<rootDir>/apps/libs/shared$1",
+    "^@module(.*)$": "<rootDir>/apps/libs/module$1",
+    "^@filter(.*)$": "<rootDir>/apps/libs/filter$1"
   },
   "transform": {
     "^.+\\.(t|j)s$": "ts-jest"
