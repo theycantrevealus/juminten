@@ -1,48 +1,34 @@
-// import { LOV } from "@database/mongo/schema/lov.schema"
-// import { Repository } from "@database/repository/interface"
-// import { Injectable } from "@nestjs/common"
+import { Repository } from "@database/provider/interface"
+import { Inject, Injectable } from "@nestjs/common"
+import { LOV } from "../../schema/lov.schema"
+import { Cluster } from "couchbase"
+import { CONNECTION_TOKEN } from "../contant"
 
-// @Injectable()
-// export class LOVRepositoryMongoCouchbase implements Repository<LOV> {
-//   private bucket: Bucket
+@Injectable()
+export class LOVRepositoryCouchbase implements Repository<LOV> {
+  constructor(
+    @Inject(CONNECTION_TOKEN("default"))
+    private readonly cluster: Cluster,
+  ) {}
 
-//   constructor() {
-//     const cluster = new Cluster("couchbase://localhost", {
-//       username: "Administrator",
-//       password: "password",
-//     })
-//     this.bucket = cluster.bucket("users")
-//   }
+  async findAll(): Promise<LOV[]> {
+    const keyspace = `\`testing\`.\`default\`.\`cat\``
+    const queryStatement = `SELECT id, name, breed FROM ${keyspace} LIMIT 10`
 
-//   async findAll(): Promise<LOV[]> {
-//     const query = `SELECT u.* FROM \`users\` u`
-//     const result = await this.bucket.scope("_default").query(query)
-//     return result.rows as LOV[]
-//   }
+    const result = await this.cluster.query<LOV>(queryStatement)
+    return result.rows
+  }
 
-//   async findOne(id: string): Promise<LOV | null> {
-//     try {
-//       const result = await this.bucket.defaultCollection().get(id)
-//       return result.content as LOV
-//     } catch {
-//       return null
-//     }
-//   }
-
-//   async create(entity: LOV): Promise<LOV> {
-//     await this.bucket.defaultCollection().upsert(entity.id, entity)
-//     return entity
-//   }
-
-//   async update(id: string, entity: Partial<LOV>): Promise<LOV> {
-//     const existing = await this.findOne(id)
-//     if (!existing) throw new Error("User not found")
-//     const updated = { ...existing, ...entity }
-//     await this.bucket.defaultCollection().upsert(id, updated)
-//     return updated
-//   }
-
-//   async delete(id: string): Promise<void> {
-//     await this.bucket.defaultCollection().remove(id)
-//   }
-// }
+  findOne(id: string): Promise<LOV> {
+    throw new Error("Method not implemented.")
+  }
+  create(entity: LOV): Promise<LOV> {
+    throw new Error("Method not implemented.")
+  }
+  update(id: string, entity: Partial<LOV>): Promise<LOV> {
+    throw new Error("Method not implemented.")
+  }
+  delete(id: string): Promise<void> {
+    throw new Error("Method not implemented.")
+  }
+}

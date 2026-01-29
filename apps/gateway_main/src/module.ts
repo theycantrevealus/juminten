@@ -1,31 +1,35 @@
 import { Module } from "@nestjs/common"
 import { AccountModule } from "./account/account.module"
 import { ConfigModule, ConfigService } from "@nestjs/config"
-import { CouchBaseModule } from "nestjs-couchbase"
 import { WinstonModule } from "@module/logger/module"
 import { environmentIdentifier, environmentName } from "@shared/environment"
 import { WinstonCustomTransports } from "@module/logger/transport"
 import { ConfigSchema } from "@configuration/schema"
 import { CouchbaseConfig } from "@configuration/register/couchbase"
 import { OAuthModule } from "./oauth/oauth.module"
-import { LOVModule } from "./lov/lov.module"
 import { CoreModule } from "apps/integration/core/module"
 import { CoreConfig } from "@configuration/register/core"
+import { ModelConfig } from "@configuration/register/model"
+import { CouchbaseModule } from "@database/couchbase/module"
+import { LOVModule } from "./lov/lov.module"
+import { CacheModule } from "@nestjs/cache-manager"
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: [
+        `${environmentIdentifier}/model.env`,
         `${environmentIdentifier}/couchbase.env`,
         `${environmentIdentifier}/core.env`,
       ],
-      load: [CouchbaseConfig, CoreConfig],
+      load: [CouchbaseConfig, CoreConfig, ModelConfig],
       validationSchema: ConfigSchema,
       validationOptions: {
         allowUnknown: true,
         abortEarly: true,
       },
     }),
+    CacheModule.register({ isGlobal: true }),
     WinstonModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
@@ -37,16 +41,18 @@ import { CoreConfig } from "@configuration/register/core"
       }),
       inject: [ConfigService],
     }),
-    CouchBaseModule.forRootAsync({
-      imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
-        connectionString: configService.get("couchbase.connectionString"),
-        username: configService.get("couchbase.username"),
-        password: configService.get("couchbase.password"),
-        bucketName: configService.get("couchbase.bucket"),
-      }),
-      inject: [ConfigService],
-    }),
+    CouchbaseModule.forRootAsync([
+      {
+        imports: [ConfigModule],
+        useFactory: async (configService: ConfigService) => ({
+          connectionString: configService.get("couchbase.connectionString"),
+          username: configService.get("couchbase.username"),
+          password: configService.get("couchbase.password"),
+          bucketName: configService.get("couchbase.bucket"),
+        }),
+        inject: [ConfigService],
+      },
+    ]),
     CoreModule.registerAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
@@ -55,9 +61,9 @@ import { CoreConfig } from "@configuration/register/core"
       }),
       inject: [ConfigService],
     }),
-    AccountModule,
+    // AccountModule,
     OAuthModule,
-    // LOVModule,
+    LOVModule,
   ],
 })
 export class GatewayMainModule {}

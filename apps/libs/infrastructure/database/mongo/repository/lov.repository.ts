@@ -1,4 +1,4 @@
-import { Repository } from "@database/repository/interface"
+import { Repository } from "@database/provider/interface"
 import { Injectable } from "@nestjs/common"
 import { LOV, LovDocument } from "../schema/lov.schema"
 import { InjectModel } from "@nestjs/mongoose"
