@@ -48,6 +48,7 @@ import { CacheModule } from "@nestjs/cache-manager"
           connectionString: configService.get("couchbase.connectionString"),
           username: configService.get("couchbase.username"),
           password: configService.get("couchbase.password"),
+          scopeName: configService.get("couchbase.scope"),
           bucketName: configService.get("couchbase.bucket"),
         }),
         inject: [ConfigService],

@@ -2,6 +2,7 @@ import { DynamicModule, Global, Module } from "@nestjs/common"
 import { CouchbaseConnectionOptions, ICouchBaseAsyncOptions } from "./interface"
 import { CONFIG_TOKEN, CONNECTION_TOKEN } from "./contant"
 import { Cluster, connect } from "couchbase"
+import { CouchbaseConnection } from "./service"
 
 @Global()
 @Module({})
@@ -26,7 +27,8 @@ export class CouchbaseModule {
             password: config.password,
           })
 
-          return cluster
+          // return cluster
+          return new CouchbaseConnection(cluster, config)
         },
         inject: [configToken],
       }

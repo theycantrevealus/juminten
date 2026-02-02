@@ -8,7 +8,7 @@ import { REPOSITORY_LOV } from "@shared/repository"
 export const ModelProviderLOV: Provider = {
   provide: REPOSITORY_LOV,
   useFactory: async (configService: ConfigService, moduleRef: ModuleRef) => {
-    const dbType = configService.get<string>("model.lov") ?? "coucbase"
+    const dbType = configService.get<string>("model.lov") ?? "couchbase"
 
     if (dbType === "couchbase") {
       return moduleRef.resolve(LOVRepositoryCouchbase)

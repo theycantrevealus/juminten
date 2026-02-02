@@ -62,10 +62,10 @@ export class OAuth2Guard extends AuthGuard("jwt") {
 
     if (account) {
       const authorizes = account.authorizes
+      return true
     } else {
       throw new UnauthorizedException("Account is not authorized")
+      return false
     }
-
-    return false
   }
 }

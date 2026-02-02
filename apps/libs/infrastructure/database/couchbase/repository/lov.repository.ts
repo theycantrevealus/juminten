@@ -1,34 +1,81 @@
 import { Repository } from "@database/provider/interface"
 import { Inject, Injectable } from "@nestjs/common"
 import { LOV } from "../../schema/lov.schema"
-import { Cluster } from "couchbase"
+import { DocumentExistsError, DocumentNotFoundError } from "couchbase"
 import { CONNECTION_TOKEN } from "../contant"
+import { CouchbaseConnection } from "../service"
 
 @Injectable()
 export class LOVRepositoryCouchbase implements Repository<LOV> {
   constructor(
     @Inject(CONNECTION_TOKEN("default"))
-    private readonly cluster: Cluster,
+    private readonly connection: CouchbaseConnection,
   ) {}
 
   async findAll(): Promise<LOV[]> {
-    const keyspace = `\`testing\`.\`default\`.\`cat\``
-    const queryStatement = `SELECT id, name, breed FROM ${keyspace} LIMIT 10`
+    try {
+      const bucket = this.connection.getBucketName()
+      const scope = this.connection.getScope()
+      const cluster = this.connection.getCluster()
 
-    const result = await this.cluster.query<LOV>(queryStatement)
-    return result.rows
+      const keyspace = `\`${bucket}\`.\`${scope}\`.\`lov\``
+      const queryStatement = `SELECT META().id, group_name, set_value, description, additional FROM ${keyspace} LIMIT 10`
+
+      const result = await cluster.query<LOV>(queryStatement)
+      return result.rows
+    } catch (error) {
+      throw new Error(error)
+    }
   }
 
-  findOne(id: string): Promise<LOV> {
+  async findOne(id: string): Promise<LOV> {
     throw new Error("Method not implemented.")
   }
-  create(entity: LOV): Promise<LOV> {
-    throw new Error("Method not implemented.")
+
+  async create(entity: LOV, id: string): Promise<LOV> {
+    const buildId =
+      id || id !== ""
+        ? this.connection.formatId(id)
+        : this.connection.generateId()
+    try {
+      const bucket = this.connection.getBucket()
+      const collection = bucket.collection("lov")
+      await collection.insert(buildId, entity)
+      return entity
+    } catch (error) {
+      if (error instanceof DocumentExistsError) {
+        throw new Error(`Error: Document with key "${buildId}" already exists`)
+      } else {
+        throw new Error(error)
+      }
+    }
   }
-  update(id: string, entity: Partial<LOV>): Promise<LOV> {
-    throw new Error("Method not implemented.")
+  async update(id: string, entity: Partial<LOV>): Promise<Partial<LOV>> {
+    try {
+      const bucket = this.connection.getBucket()
+      const collection = bucket.collection("lov")
+      await collection.upsert(id, entity)
+      return entity
+    } catch (error) {
+      if (error instanceof DocumentNotFoundError) {
+        throw new Error(`Error: Document is not found`)
+      } else {
+        throw new Error(error)
+      }
+    }
   }
-  delete(id: string): Promise<void> {
-    throw new Error("Method not implemented.")
+
+  async delete(id: string): Promise<void> {
+    try {
+      const bucket = this.connection.getBucket()
+      const collection = bucket.collection("lov")
+      await collection.remove(id)
+    } catch (error) {
+      if (error instanceof DocumentNotFoundError) {
+        throw new Error(`Error: Document is not found`)
+      } else {
+        throw new Error(error)
+      }
+    }
   }
 }

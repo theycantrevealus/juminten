@@ -1,11 +1,12 @@
 import { ModuleMetadata, Type } from "@nestjs/common"
 
 export interface CouchbaseConnectionOptions {
-  name?: string // optional, default = 'default'
+  name?: string
   connectionString: string
-  bucketName: string // global bucket for connection
-  scopeName?: string // TODO
-  collectionName?: string // TODO
+  bucketName: string
+  scopeName?: string
+  schemaName?: string
+  collectionName?: string
   username: string
   password: string
 }
