@@ -1,0 +1,2 @@
+SOURCE_LOV=couchbase
+SOURCE_ACCOUNT=couchbase
