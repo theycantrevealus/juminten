@@ -2,14 +2,14 @@ import { Repository } from "@database/provider/interface"
 import { Inject, Injectable } from "@nestjs/common"
 import { LOV } from "../../schema/lov.schema"
 import { DocumentExistsError, DocumentNotFoundError } from "couchbase"
-import { CONNECTION_TOKEN } from "../contant"
-import { CouchbaseConnection } from "../service"
+import { CONNECTION_TOKEN } from "../constant"
+import { CouchbaseInstance } from "../service"
 
 @Injectable()
 export class LOVRepositoryCouchbase implements Repository<LOV> {
   constructor(
     @Inject(CONNECTION_TOKEN("default"))
-    private readonly connection: CouchbaseConnection,
+    private readonly connection: CouchbaseInstance,
   ) {}
 
   async findAll(): Promise<LOV[]> {

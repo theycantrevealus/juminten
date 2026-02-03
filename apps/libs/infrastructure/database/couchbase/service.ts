@@ -4,7 +4,7 @@ import { Injectable } from "@nestjs/common"
 import { randomUUID } from "crypto"
 
 @Injectable()
-export class CouchbaseConnection {
+export class CouchbaseInstance {
   constructor(
     private readonly cluster: Cluster,
     private readonly options: CouchbaseConnectionOptions,
