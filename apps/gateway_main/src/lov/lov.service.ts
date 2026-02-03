@@ -18,7 +18,21 @@ export class LOVService {
    * @returns { LOV[] }
    */
   async all(config = {}): Promise<LOV[]> {
-    return await this.repoLOV.findAll()
+    return await this.repoLOV.findAll({
+      select: [
+        "META().id",
+        "group_name",
+        "set_value",
+        "description",
+        "additional",
+      ],
+      orderBy: {
+        field: "group_name",
+        direction: "ASC",
+      },
+      limit: 10,
+      offset: 0,
+    })
   }
 
   /**

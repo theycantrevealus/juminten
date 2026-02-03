@@ -4,24 +4,24 @@ import { LOV } from "../../schema/lov.schema"
 import { DocumentExistsError, DocumentNotFoundError } from "couchbase"
 import { CONNECTION_TOKEN } from "../constant"
 import { CouchbaseInstance } from "../service"
+import { QueryOptions } from "../interface"
 
 @Injectable()
 export class LOVRepositoryCouchbase implements Repository<LOV> {
   constructor(
     @Inject(CONNECTION_TOKEN("default"))
-    private readonly connection: CouchbaseInstance,
+    private readonly couchbaseInstance: CouchbaseInstance,
   ) {}
 
-  async findAll(): Promise<LOV[]> {
+  async findAll(options?: QueryOptions): Promise<LOV[]> {
     try {
-      const bucket = this.connection.getBucketName()
-      const scope = this.connection.getScope()
-      const cluster = this.connection.getCluster()
+      const { query, params } = this.couchbaseInstance.buildN1qlQuery(
+        "lov",
+        options,
+      )
 
-      const keyspace = `\`${bucket}\`.\`${scope}\`.\`lov\``
-      const queryStatement = `SELECT META().id, group_name, set_value, description, additional FROM ${keyspace} LIMIT 10`
-
-      const result = await cluster.query<LOV>(queryStatement)
+      const cluster = this.couchbaseInstance.getCluster()
+      const result = await cluster.query<LOV>(query, { parameters: params })
       return result.rows
     } catch (error) {
       throw new Error(error)
@@ -35,10 +35,10 @@ export class LOVRepositoryCouchbase implements Repository<LOV> {
   async create(entity: LOV, id: string): Promise<LOV> {
     const buildId =
       id || id !== ""
-        ? this.connection.formatId(id)
-        : this.connection.generateId()
+        ? this.couchbaseInstance.formatId(id)
+        : this.couchbaseInstance.generateId()
     try {
-      const bucket = this.connection.getBucket()
+      const bucket = this.couchbaseInstance.getBucket()
       const collection = bucket.collection("lov")
       await collection.insert(buildId, entity)
       return entity
@@ -52,7 +52,7 @@ export class LOVRepositoryCouchbase implements Repository<LOV> {
   }
   async update(id: string, entity: Partial<LOV>): Promise<Partial<LOV>> {
     try {
-      const bucket = this.connection.getBucket()
+      const bucket = this.couchbaseInstance.getBucket()
       const collection = bucket.collection("lov")
       await collection.upsert(id, entity)
       return entity
@@ -67,7 +67,7 @@ export class LOVRepositoryCouchbase implements Repository<LOV> {
 
   async delete(id: string): Promise<void> {
     try {
-      const bucket = this.connection.getBucket()
+      const bucket = this.couchbaseInstance.getBucket()
       const collection = bucket.collection("lov")
       await collection.remove(id)
     } catch (error) {

@@ -29,3 +29,14 @@ export interface ICouchBaseAsyncOptions extends Pick<
   ) => Promise<CouchbaseConnectionOptions> | CouchbaseConnectionOptions
   inject?: any[]
 }
+
+export interface QueryOptions {
+  select?: string[]
+  where?: Record<string, any>
+  limit?: number
+  offset?: number
+  orderBy?: {
+    field: string
+    direction?: "ASC" | "DESC"
+  }
+}
