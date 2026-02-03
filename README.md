@@ -2,7 +2,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <img src="0000.png" width="380" />
+  <img src="logo.png" width="380" />
   <p align="center">
     <a href="#">View Demo</a>
     ·
