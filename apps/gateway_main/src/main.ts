@@ -39,11 +39,11 @@ async function bootstrap() {
   })
 
   app.useGlobalFilters(new CommonErrorFilter(logger))
-  app.useGlobalPipes(new ValidationPipe({
-    whitelist: true,
-    forbidNonWhitelisted: true,
-    transform: true,
-  }))
+  // app.useGlobalPipes(new ValidationPipe({
+  //   whitelist: true,
+  //   forbidNonWhitelisted: true,
+  //   transform: true,
+  // }))
 
   app.enableVersioning({
     type: VersioningType.URI,

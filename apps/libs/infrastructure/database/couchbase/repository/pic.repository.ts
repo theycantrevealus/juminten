@@ -1,7 +1,7 @@
 import { Repository } from "@database/provider/interface"
 import { Inject, Injectable } from "@nestjs/common"
 import { PIC } from "../../schema/pic.schema"
-import { DocumentExistsError, DocumentNotFoundError } from "couchbase"
+import { DocumentExistsError, DocumentNotFoundError, MutateInSpec } from "couchbase"
 import { CONNECTION_TOKEN } from "../constant"
 import { CouchbaseInstance } from "../service"
 import { QueryOptions } from "../interface"
@@ -15,10 +15,27 @@ export class PICRepositoryCouchbase implements Repository<PIC> {
 
     async findAll(options?: QueryOptions): Promise<PIC[]> {
         try {
-            const { query, params } = this.couchbaseInstance.buildN1qlQuery(
+            const { query: baseQuery, params } = this.couchbaseInstance.buildN1qlQuery(
                 "pic",
                 options,
             )
+
+            // Add soft delete filter: show records where deleted_at is NULL or MISSING
+            let query = baseQuery
+            if (options?.withSoft === undefined || options?.withSoft === false) {
+                if (query.includes("WHERE")) {
+                    query = query.replace("WHERE", "WHERE (`deleted_at` IS NULL OR `deleted_at` IS MISSING) AND")
+                } else {
+                    // Find position before ORDER BY, LIMIT, or end
+                    const orderByIndex = query.indexOf("ORDER BY")
+                    const limitIndex = query.indexOf("LIMIT")
+                    const insertPos = orderByIndex > -1 ? orderByIndex : (limitIndex > -1 ? limitIndex : query.length)
+                    query = query.slice(0, insertPos) + " WHERE (`deleted_at` IS NULL OR `deleted_at` IS MISSING) " + query.slice(insertPos)
+                }
+            }
+
+            // console.log("PIC findAll query:", query)
+            // console.log("PIC findAll params:", params)
 
             const cluster = this.couchbaseInstance.getCluster()
             const result = await cluster.query<PIC>(query, { parameters: params })
@@ -51,8 +68,9 @@ export class PICRepositoryCouchbase implements Repository<PIC> {
         try {
             const bucket = this.couchbaseInstance.getBucket()
             const collection = bucket.collection("pic")
-            await collection.insert(buildId, entity)
-            return entity
+            const data = PIC.create(entity)
+            await collection.insert(buildId, data)
+            return data
         } catch (error) {
             if (error instanceof DocumentExistsError) {
                 throw new Error(`Error: Document with key "${buildId}" already exists`)
@@ -66,8 +84,12 @@ export class PICRepositoryCouchbase implements Repository<PIC> {
         try {
             const bucket = this.couchbaseInstance.getBucket()
             const collection = bucket.collection("pic")
-            await collection.upsert(id, entity)
-            return entity
+            const updatedEntity = {
+                ...entity,
+                updated_at: new Date(),
+            }
+            await collection.upsert(id, updatedEntity)
+            return updatedEntity
         } catch (error) {
             if (error instanceof DocumentNotFoundError) {
                 throw new Error(`Error: Document is not found`)
@@ -82,6 +104,22 @@ export class PICRepositoryCouchbase implements Repository<PIC> {
             const bucket = this.couchbaseInstance.getBucket()
             const collection = bucket.collection("pic")
             await collection.remove(id)
+        } catch (error) {
+            if (error instanceof DocumentNotFoundError) {
+                throw new Error(`Error: Document is not found`)
+            } else {
+                throw new Error(error)
+            }
+        }
+    }
+
+    async deleteSoft(id: string): Promise<void> {
+        try {
+            const bucket = this.couchbaseInstance.getBucket()
+            const collection = bucket.collection("pic")
+            await collection.mutateIn(id, [
+                MutateInSpec.upsert("deleted_at", new Date()),
+            ])
         } catch (error) {
             if (error instanceof DocumentNotFoundError) {
                 throw new Error(`Error: Document is not found`)

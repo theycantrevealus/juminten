@@ -82,13 +82,12 @@ describe("PIC Service", () => {
             // Should first fetch existing data
             expect(mockPICRepository.findOne).toHaveBeenCalledWith(id)
 
-            // Should update with merged data including updated_at
+            // Should update with merged data (timestamps handled by repository)
             expect(mockPICRepository.update).toHaveBeenCalledWith(
                 id,
                 expect.objectContaining({
                     name: updatePayload.name,
                     email: updatePayload.email,
-                    updated_at: expect.any(Date),
                 }),
             )
         })

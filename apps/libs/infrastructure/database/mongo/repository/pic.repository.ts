@@ -27,4 +27,8 @@ export class PICRepositoryMongo implements Repository<PIC> {
     delete(id: string): Promise<void> {
         throw new Error("Method not implemented.")
     }
+
+    deleteSoft(id: string): Promise<void> {
+        throw new Error("Method not implemented.")
+    }
 }
