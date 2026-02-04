@@ -27,7 +27,6 @@ export class CouchbaseModule {
             password: config.password,
           })
 
-          // return cluster
           return new CouchbaseInstance(cluster, config)
         },
         inject: [configToken],

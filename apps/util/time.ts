@@ -24,10 +24,6 @@ export class TimeManagement {
     return this.rawDate
   }
 
-  // getTimezone(target) {
-  //   return moment().tz(target).format('L hh:mm:ss')
-  // }
-
   async validateFormat(format, input) {
     return moment(input, format, true).isValid()
   }

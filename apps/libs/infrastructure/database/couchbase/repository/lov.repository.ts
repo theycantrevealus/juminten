@@ -1,4 +1,4 @@
-import { Repository } from "@database/provider/interface"
+import { PrimeData, Repository } from "@database/provider/interface"
 import { Inject, Injectable } from "@nestjs/common"
 import { LOV } from "../../schema/lov.schema"
 import {
@@ -17,20 +17,42 @@ export class LOVRepositoryCouchbase implements Repository<LOV> {
     private readonly couchbaseInstance: CouchbaseInstance,
   ) {}
 
-  async findAll(options?: QueryOptions): Promise<LOV[]> {
+  async findAll(options?: QueryOptions): Promise<LOV[] | PrimeData<LOV>> {
     try {
       if (options.withSoft === undefined || options.withSoft === false) {
         options.where = { ...options.where, deleted_at: false }
       }
 
-      const { query, params } = this.couchbaseInstance.buildN1qlQuery(
+      const { dataQuery, countQuery } = this.couchbaseInstance.buildN1qlQuery(
         "lov",
         options,
       )
 
       const cluster = this.couchbaseInstance.getCluster()
-      const result = await cluster.query<LOV>(query, { parameters: params })
-      return result.rows
+      const result = await cluster.query<LOV>(dataQuery.query, {
+        parameters: dataQuery.params,
+      })
+
+      if (options.withPagination) {
+        const countResult = await cluster.query(countQuery!.query, {
+          parameters: countQuery!.params,
+        })
+
+        const totalRecords = countResult.rows[0].totalRecords
+        const limit = dataQuery.params.limit
+        const offset = dataQuery.params.offset
+
+        return {
+          data: result.rows,
+          totalRecords,
+          first: offset + 1,
+          rows: limit,
+          totalPages: Math.ceil(totalRecords / limit),
+          currentPage: Math.floor(offset / limit) + 1,
+        }
+      } else {
+        return result.rows
+      }
     } catch (error) {
       throw new Error(error)
     }

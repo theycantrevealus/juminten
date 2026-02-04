@@ -5,11 +5,7 @@ import { DTOAccountAdd } from "./account.dto.add"
 export class AccountService {
   constructor() {}
 
-  async find() {
-    //
-  }
+  async find() {}
 
-  async add(createAccount: DTOAccountAdd) {
-    //
-  }
+  async add(createAccount: DTOAccountAdd) {}
 }
