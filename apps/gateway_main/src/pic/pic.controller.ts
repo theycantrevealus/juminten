@@ -9,6 +9,7 @@ import {
     Param,
     Patch,
     Post,
+    Query,
     Req,
     UseGuards,
     UseInterceptors,
@@ -16,6 +17,7 @@ import {
 import { PICService } from "./pic.service"
 import { DTOCreatePIC } from "./pic.dto.create"
 import { DTOUpdatePIC } from "./pic.dto.update"
+import { DTOPrimeTableQuery } from "./pic.dto.prime"
 
 @Controller({ path: "pic", version: "1" })
 export class PICController {
@@ -24,9 +26,17 @@ export class PICController {
     @Get()
     @UseInterceptors(GeneralInterceptor)
     @UseGuards(OAuth2Guard)
-    @Authorization(false)
+    @Authorization(true)
     async all() {
         return await this.picService.all()
+    }
+
+    @Get("prime")
+    @UseInterceptors(GeneralInterceptor)
+    @UseGuards(OAuth2Guard)
+    @Authorization(true)
+    async allPrime(@Query() query: DTOPrimeTableQuery) {
+        return await this.picService.allPrime(query)
     }
 
     @Post()
@@ -34,7 +44,8 @@ export class PICController {
     @UseGuards(OAuth2Guard)
     @Authorization(true)
     async add(@Body() parameter: DTOCreatePIC, @Req() request: any) {
-        return await this.picService.create(parameter, request.user)
+        const { user_profile, authorizes } = request.user || {}
+        return await this.picService.create(parameter, { user_profile, authorizes })
     }
 
     @Patch(":id/edit")
@@ -51,5 +62,13 @@ export class PICController {
     @Authorization(true)
     async remove(@Param() param) {
         return await this.picService.remove(param.id)
+    }
+
+    @Delete(":id/soft")
+    @UseInterceptors(GeneralInterceptor)
+    @UseGuards(OAuth2Guard)
+    @Authorization(true)
+    async removeSoft(@Param() param) {
+        return await this.picService.removeSoft(param.id)
     }
 }

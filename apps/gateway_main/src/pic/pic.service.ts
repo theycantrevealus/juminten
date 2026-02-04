@@ -4,7 +4,7 @@ import { Inject, Injectable } from "@nestjs/common"
 import { REPOSITORY_PIC } from "@shared/repository"
 import { DTOCreatePIC } from "./pic.dto.create"
 import { DTOUpdatePIC } from "./pic.dto.update"
-import { TimeManagement } from "@util/time"
+import { DTOPrimeTableQuery, PrimeTableResponse } from "./pic.dto.prime"
 
 @Injectable()
 export class PICService {
@@ -20,8 +20,7 @@ export class PICService {
      */
     async all(config = {}): Promise<PIC[]> {
         return await this.repoPIC.findAll({
-            select: [
-                "META().id",
+            fields: [
                 "email",
                 "msisdn",
                 "name",
@@ -39,6 +38,63 @@ export class PICService {
     }
 
     /**
+     * Return PIC data in PrimeNG table format with pagination, sorting, and filtering
+     *
+     * @param { DTOPrimeTableQuery } query - Query params from PrimeNG table
+     * @returns { PrimeTableResponse<PIC> }
+     */
+    async allPrime(query: DTOPrimeTableQuery): Promise<PrimeTableResponse<PIC>> {
+        const { first = 0, rows = 10, sortField, sortOrder, globalFilter } = query
+
+        // Get all records for total count and filtering
+        let allRecords = await this.repoPIC.findAll({
+            fields: [
+                "email",
+                "msisdn",
+                "name",
+                "created_by",
+                "created_at",
+                "updated_at",
+            ],
+            orderBy: sortField ? {
+                field: sortField,
+                direction: sortOrder === -1 ? "DESC" : "ASC",
+            } : {
+                field: "name",
+                direction: "ASC",
+            },
+        })
+
+        // Apply global filter in-memory (case-insensitive)
+        if (globalFilter) {
+            const filterLower = globalFilter.toLowerCase()
+            allRecords = allRecords.filter(record =>
+                record.name?.toLowerCase().includes(filterLower) ||
+                record.email?.toLowerCase().includes(filterLower) ||
+                record.msisdn?.includes(globalFilter)
+            )
+        }
+
+        const totalRecords = allRecords.length
+        const totalPages = Math.ceil(totalRecords / rows)
+        const currentPage = Math.floor(first / rows) + 1
+
+        // Apply pagination in-memory
+        const data = allRecords.slice(first, first + rows)
+
+        return {
+            data,
+            totalRecords,
+            first,
+            rows,
+            totalPages,
+            currentPage,
+            hasNextPage: currentPage < totalPages,
+            hasPrevPage: currentPage > 1,
+        }
+    }
+
+    /**
      * Add new PIC
      *
      * @param { DTOCreatePIC } payload - PIC data to create
@@ -46,17 +102,11 @@ export class PICService {
      * @returns { void }
      */
     async create(payload: DTOCreatePIC, createdBy: any): Promise<void> {
-        const timeManagement = new TimeManagement()
-        const now = timeManagement.getTimezone("Asia/Jakarta")
-
         await this.repoPIC.create(
             {
                 ...payload,
                 created_by: createdBy,
-                created_at: now,
-                updated_at: now,
-                deleted_at: null,
-            },
+            } as PIC,
             `pic::${payload.msisdn}`,
         )
     }
@@ -68,17 +118,13 @@ export class PICService {
      * @param { DTOUpdatePIC } payload - PIC data to update
      */
     async update(id: string, payload: DTOUpdatePIC): Promise<void> {
-        const timeManagement = new TimeManagement()
-        const now = timeManagement.getTimezone("Asia/Jakarta")
-
         // Get existing data first
         const existingData = await this.repoPIC.findOne(id)
 
-        // Merge existing data with new payload and update timestamp
+        // Merge existing data with new payload (timestamps handled by repository)
         await this.repoPIC.update(id, {
             ...existingData,
             ...payload,
-            updated_at: now,
         })
     }
 
@@ -90,5 +136,15 @@ export class PICService {
      */
     async remove(id: string): Promise<void> {
         await this.repoPIC.delete(id)
+    }
+
+    /**
+     * Delete PIC soft
+     *
+     * @param { string } id - ID to delete
+     * @returns { void }
+     */
+    async removeSoft(id: string): Promise<void> {
+        await this.repoPIC.deleteSoft(id)
     }
 }
