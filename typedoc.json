@@ -1,0 +1,12 @@
+{
+  "entryPoints": ["apps/**/*.ts", "libs/**/*.ts"],
+  "entryPointStrategy": "expand",
+  "tsconfig": "tsconfig.json",
+  "out": "docs",
+  "basePath": ".",
+  "exclude": ["**/*.spec.ts", "node_modules", "k6"],
+  "excludeExternals": true,
+  "excludePrivate": true,
+  "excludeProtected": false,
+  "includeVersion": true
+}

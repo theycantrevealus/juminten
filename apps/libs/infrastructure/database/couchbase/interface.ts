@@ -31,8 +31,9 @@ export interface ICouchBaseAsyncOptions extends Pick<
 }
 
 export interface QueryOptions {
-  select?: string[]
+  fields?: string[]
   where?: Record<string, any>
+  withSoft?: boolean
   limit?: number
   offset?: number
   orderBy?: {

@@ -34,20 +34,42 @@ export class CouchbaseInstance {
     return id.replace(/[:{}"]/g, "_")
   }
 
-  buildN1qlQuery(collectionName: string, options: QueryOptions = {}) {
+  /**
+   * Build given option to a N1QL query
+   * Hint: No need to define META().id on field. It will process as string if defined. It is already handled inside method
+   *
+   * @param { string } collectionName  - Target collection to fetch
+   * @param { QueryOptions } options - Query option
+   * @returns
+   */
+  buildN1qlQuery(
+    collectionName: string,
+    options: QueryOptions = {},
+  ): {
+    query: string
+    params: Record<string, any>
+  } {
     const params: Record<string, any> = {}
 
     const projection =
-      options.select && options.select.length > 0
-        ? options.select.map((f) => `\`${f}\``).join(", ")
+      options.fields && options.fields.length > 0
+        ? options.fields.map((f) => `\`${f}\``).join(", ")
         : "*"
 
     let query = `
-    SELECT ${projection}
+    SELECT META().id, ${projection}
     FROM \`${this.getBucketName()}\`.\`${this.getScope()}\`.\`${collectionName}\``
 
     if (options.where && Object.keys(options.where).length > 0) {
       const conditions = Object.entries(options.where).map(([key, value]) => {
+        if (value === null) {
+          return `\`${key}\` IS NULL`
+        }
+
+        if (value === undefined) {
+          return `\`${key}\` IS MISSING`
+        }
+
         params[key] = value
         return `\`${key}\` = $${key}`
       })

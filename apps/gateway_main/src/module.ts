@@ -7,13 +7,13 @@ import { WinstonCustomTransports } from "@module/logger/transport"
 import { ConfigSchema } from "@configuration/schema"
 import { CouchbaseConfig } from "@configuration/register/couchbase"
 import { OAuthModule } from "./oauth/oauth.module"
-import { CoreModule } from "apps/integration/core/module"
 import { CoreConfig } from "@configuration/register/core"
 import { ModelConfig } from "@configuration/register/model"
 import { CouchbaseModule } from "@database/couchbase/module"
 import { LOVModule } from "./lov/lov.module"
 import { PICModule } from "./pic/pic.module"
 import { CacheModule } from "@nestjs/cache-manager"
+import { CoreModule } from "@integration/core/module"
 @Module({
   imports: [
     ConfigModule.forRoot({

@@ -19,13 +19,16 @@ export class LOVService {
    */
   async all(config = {}): Promise<LOV[]> {
     return await this.repoLOV.findAll({
-      select: [
-        "META().id",
+      fields: [
         "group_name",
         "set_value",
         "description",
         "additional",
+        "created_at",
+        "updated_at",
+        "deleted_at",
       ],
+      withSoft: true,
       orderBy: {
         field: "group_name",
         direction: "ASC",
@@ -65,5 +68,15 @@ export class LOVService {
    */
   async remove(id: string): Promise<void> {
     await this.repoLOV.delete(id)
+  }
+
+  /**
+   * Delete LOV soft
+   *
+   * @param { string } id - ID to delete
+   * @returns { void }
+   */
+  async removeSoft(id: string): Promise<void> {
+    await this.repoLOV.deleteSoft(id)
   }
 }
