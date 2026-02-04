@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common"
 import { DTOSignIn } from "./oauth.dto.signin"
-import { CoreOauthService } from "apps/integration/core/oauth.service"
+import { CoreOauthService } from "@integration/core/oauth.service"
 
 @Injectable()
 export class OAuthService {
