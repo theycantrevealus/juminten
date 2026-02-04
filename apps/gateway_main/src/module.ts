@@ -12,6 +12,7 @@ import { CoreConfig } from "@configuration/register/core"
 import { ModelConfig } from "@configuration/register/model"
 import { CouchbaseModule } from "@database/couchbase/module"
 import { LOVModule } from "./lov/lov.module"
+import { PICModule } from "./pic/pic.module"
 import { CacheModule } from "@nestjs/cache-manager"
 @Module({
   imports: [
@@ -65,6 +66,7 @@ import { CacheModule } from "@nestjs/cache-manager"
     // AccountModule,
     OAuthModule,
     LOVModule,
+    PICModule,
   ],
 })
-export class GatewayMainModule {}
+export class GatewayMainModule { }
