@@ -68,7 +68,18 @@ export class PICService {
      * @param { DTOUpdatePIC } payload - PIC data to update
      */
     async update(id: string, payload: DTOUpdatePIC): Promise<void> {
-        await this.repoPIC.update(id, payload)
+        const timeManagement = new TimeManagement()
+        const now = timeManagement.getTimezone("Asia/Jakarta")
+
+        // Get existing data first
+        const existingData = await this.repoPIC.findOne(id)
+
+        // Merge existing data with new payload and update timestamp
+        await this.repoPIC.update(id, {
+            ...existingData,
+            ...payload,
+            updated_at: now,
+        })
     }
 
     /**

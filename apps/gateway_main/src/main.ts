@@ -4,7 +4,7 @@ import {
   FastifyAdapter,
   NestFastifyApplication,
 } from "@nestjs/platform-fastify"
-import { VersioningType } from "@nestjs/common"
+import { ValidationPipe, VersioningType } from "@nestjs/common"
 import { WinstonCustomTransports } from "@module/logger/transport"
 import { environmentName } from "@shared/environment"
 import { CommonErrorFilter } from "@filter/common"
@@ -39,6 +39,11 @@ async function bootstrap() {
   })
 
   app.useGlobalFilters(new CommonErrorFilter(logger))
+  app.useGlobalPipes(new ValidationPipe({
+    whitelist: true,
+    forbidNonWhitelisted: true,
+    transform: true,
+  }))
 
   app.enableVersioning({
     type: VersioningType.URI,

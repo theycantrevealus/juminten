@@ -29,7 +29,18 @@ export class PICRepositoryCouchbase implements Repository<PIC> {
     }
 
     async findOne(id: string): Promise<PIC> {
-        throw new Error("Method not implemented.")
+        try {
+            const bucket = this.couchbaseInstance.getBucket()
+            const collection = bucket.collection("pic")
+            const result = await collection.get(id)
+            return result.content as PIC
+        } catch (error) {
+            if (error instanceof DocumentNotFoundError) {
+                throw new Error(`Error: Document is not found`)
+            } else {
+                throw new Error(error)
+            }
+        }
     }
 
     async create(entity: PIC, id: string): Promise<PIC> {

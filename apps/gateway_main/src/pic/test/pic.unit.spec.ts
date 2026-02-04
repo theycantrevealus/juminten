@@ -75,10 +75,22 @@ describe("PIC Service", () => {
             email: "jane@example.com",
         }
 
-        it("should call repository update with correct parameters", async () => {
+        it("should call repository findOne and update with merged data", async () => {
             const id = "pic::08123456789012"
             await picService.update(id, updatePayload)
-            expect(mockPICRepository.update).toHaveBeenCalledWith(id, updatePayload)
+
+            // Should first fetch existing data
+            expect(mockPICRepository.findOne).toHaveBeenCalledWith(id)
+
+            // Should update with merged data including updated_at
+            expect(mockPICRepository.update).toHaveBeenCalledWith(
+                id,
+                expect.objectContaining({
+                    name: updatePayload.name,
+                    email: updatePayload.email,
+                    updated_at: expect.any(Date),
+                }),
+            )
         })
     })
 
