@@ -51,4 +51,12 @@ export class LOVController {
   async remove(@Param() param) {
     return await this.lovService.remove(param.id)
   }
+
+  @Delete(":id/soft")
+  @UseInterceptors(GeneralInterceptor)
+  @UseGuards(OAuth2Guard)
+  @Authorization(true)
+  async removeSoft(@Param() param) {
+    return await this.lovService.removeSoft(param.id)
+  }
 }

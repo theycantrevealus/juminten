@@ -1,7 +1,11 @@
 import { Repository } from "@database/provider/interface"
 import { Inject, Injectable } from "@nestjs/common"
 import { LOV } from "../../schema/lov.schema"
-import { DocumentExistsError, DocumentNotFoundError } from "couchbase"
+import {
+  DocumentExistsError,
+  DocumentNotFoundError,
+  MutateInSpec,
+} from "couchbase"
 import { CONNECTION_TOKEN } from "../constant"
 import { CouchbaseInstance } from "../service"
 import { QueryOptions } from "../interface"
@@ -15,6 +19,10 @@ export class LOVRepositoryCouchbase implements Repository<LOV> {
 
   async findAll(options?: QueryOptions): Promise<LOV[]> {
     try {
+      if (options.withSoft === undefined || options.withSoft === false) {
+        options.where = { ...options.where, deleted_at: false }
+      }
+
       const { query, params } = this.couchbaseInstance.buildN1qlQuery(
         "lov",
         options,
@@ -40,7 +48,9 @@ export class LOVRepositoryCouchbase implements Repository<LOV> {
     try {
       const bucket = this.couchbaseInstance.getBucket()
       const collection = bucket.collection("lov")
-      await collection.insert(buildId, entity)
+      const data = LOV.create(entity)
+      console.log(data)
+      await collection.insert(buildId, data)
       return entity
     } catch (error) {
       if (error instanceof DocumentExistsError) {
@@ -50,6 +60,7 @@ export class LOVRepositoryCouchbase implements Repository<LOV> {
       }
     }
   }
+
   async update(id: string, entity: Partial<LOV>): Promise<Partial<LOV>> {
     try {
       const bucket = this.couchbaseInstance.getBucket()
@@ -70,6 +81,22 @@ export class LOVRepositoryCouchbase implements Repository<LOV> {
       const bucket = this.couchbaseInstance.getBucket()
       const collection = bucket.collection("lov")
       await collection.remove(id)
+    } catch (error) {
+      if (error instanceof DocumentNotFoundError) {
+        throw new Error(`Error: Document is not found`)
+      } else {
+        throw new Error(error)
+      }
+    }
+  }
+
+  async deleteSoft(id: string): Promise<void> {
+    try {
+      const bucket = this.couchbaseInstance.getBucket()
+      const collection = bucket.collection("lov")
+      await collection.mutateIn(id, [
+        MutateInSpec.upsert("deleted_at", new Date()),
+      ])
     } catch (error) {
       if (error instanceof DocumentNotFoundError) {
         throw new Error(`Error: Document is not found`)
