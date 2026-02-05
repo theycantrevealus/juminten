@@ -41,6 +41,4 @@ export interface PrimeTableResponse<T> {
     // Pagination helpers
     totalPages: number
     currentPage: number
-    hasNextPage: boolean
-    hasPrevPage: boolean
 }

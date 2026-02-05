@@ -1,5 +1,5 @@
 import { PIC } from "@database/schema/pic.schema"
-import { Repository } from "@database/provider/interface"
+import { PrimeData, Repository } from "@database/provider/interface"
 import { Inject, Injectable } from "@nestjs/common"
 import { REPOSITORY_PIC } from "@shared/repository"
 import { DTOCreatePIC } from "./pic.dto.create"
@@ -34,7 +34,7 @@ export class PICService {
             },
             limit: 10,
             offset: 0,
-        })
+        }) as PIC[]
     }
 
     /**
@@ -46,51 +46,71 @@ export class PICService {
     async allPrime(query: DTOPrimeTableQuery): Promise<PrimeTableResponse<PIC>> {
         const { first = 0, rows = 10, sortField, sortOrder, globalFilter } = query
 
-        // Get all records for total count and filtering
-        let allRecords = await this.repoPIC.findAll({
-            fields: [
-                "email",
-                "msisdn",
-                "name",
-                "created_by",
-                "created_at",
-                "updated_at",
-            ],
-            orderBy: sortField ? {
-                field: sortField,
-                direction: sortOrder === -1 ? "DESC" : "ASC",
-            } : {
-                field: "name",
-                direction: "ASC",
-            },
-        })
+        const fields = [
+            "email",
+            "msisdn",
+            "name",
+            "created_by",
+            "created_at",
+            "updated_at",
+        ]
 
-        // Apply global filter in-memory (case-insensitive)
+        const orderBy = sortField ? {
+            field: sortField,
+            direction: sortOrder === -1 ? "DESC" : "ASC",
+        } : {
+            field: "name",
+            direction: "ASC",
+        }
+
+        // If globalFilter is present, fetch all and filter in-memory (multi-field OR logic)
         if (globalFilter) {
+            let allRecords = await this.repoPIC.findAll({
+                fields,
+                orderBy: orderBy as { field: string; direction: "ASC" | "DESC" },
+            }) as PIC[]
+
+            // Apply global filter in-memory (case-insensitive)
             const filterLower = globalFilter.toLowerCase()
             allRecords = allRecords.filter(record =>
                 record.name?.toLowerCase().includes(filterLower) ||
                 record.email?.toLowerCase().includes(filterLower) ||
                 record.msisdn?.includes(globalFilter)
             )
+
+            const totalRecords = allRecords.length
+            const totalPages = Math.ceil(totalRecords / rows)
+            const currentPage = Math.floor(first / rows) + 1
+
+            // Apply pagination in-memory
+            const data = allRecords.slice(first, first + rows)
+
+            return {
+                data,
+                totalRecords,
+                first,
+                rows,
+                totalPages,
+                currentPage,
+            }
         }
 
-        const totalRecords = allRecords.length
-        const totalPages = Math.ceil(totalRecords / rows)
-        const currentPage = Math.floor(first / rows) + 1
-
-        // Apply pagination in-memory
-        const data = allRecords.slice(first, first + rows)
+        // No globalFilter: use database-level pagination
+        const result = await this.repoPIC.findAll({
+            fields,
+            orderBy: orderBy as { field: string; direction: "ASC" | "DESC" },
+            limit: Number(rows),
+            offset: Number(first),
+            withPagination: true,
+        }) as PrimeData<PIC>
 
         return {
-            data,
-            totalRecords,
-            first,
-            rows,
-            totalPages,
-            currentPage,
-            hasNextPage: currentPage < totalPages,
-            hasPrevPage: currentPage > 1,
+            data: result.data,
+            totalRecords: result.totalRecords,
+            first: result.first,
+            rows: result.rows,
+            totalPages: result.totalPages,
+            currentPage: result.currentPage,
         }
     }
 

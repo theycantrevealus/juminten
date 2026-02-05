@@ -111,7 +111,24 @@ describe("Program Service", () => {
         ]
 
         beforeEach(() => {
-            mockProgramRepository.findAll.mockResolvedValue(mockProgramArray)
+            // Mock to handle both array and PrimeData returns based on withPagination
+            mockProgramRepository.findAll.mockImplementation((options: any) => {
+                if (options?.withPagination) {
+                    // Return PrimeData format
+                    const limit = options.limit || 10
+                    const offset = options.offset || 0
+                    return Promise.resolve({
+                        data: mockProgramArray.slice(offset, offset + limit),
+                        totalRecords: mockProgramArray.length,
+                        first: offset,
+                        rows: limit,
+                        totalPages: Math.ceil(mockProgramArray.length / limit),
+                        currentPage: Math.floor(offset / limit) + 1,
+                    })
+                }
+                // Return array (for globalFilter case)
+                return Promise.resolve(mockProgramArray)
+            })
         })
 
         it("should return paginated data with default values", async () => {
@@ -124,8 +141,6 @@ describe("Program Service", () => {
             expect(result).toHaveProperty("rows", 10)
             expect(result).toHaveProperty("totalPages", 1)
             expect(result).toHaveProperty("currentPage", 1)
-            expect(result).toHaveProperty("hasNextPage", false)
-            expect(result).toHaveProperty("hasPrevPage", false)
         })
 
         it("should apply pagination correctly", async () => {
@@ -135,8 +150,6 @@ describe("Program Service", () => {
             expect(result.data.length).toBe(2)
             expect(result.totalRecords).toBe(3)
             expect(result.totalPages).toBe(2)
-            expect(result.hasNextPage).toBe(true)
-            expect(result.hasPrevPage).toBe(false)
         })
 
         it("should apply pagination for second page", async () => {
@@ -145,8 +158,6 @@ describe("Program Service", () => {
 
             expect(result.data.length).toBe(1)
             expect(result.currentPage).toBe(2)
-            expect(result.hasNextPage).toBe(false)
-            expect(result.hasPrevPage).toBe(true)
         })
 
         it("should apply sorting with sortField", async () => {

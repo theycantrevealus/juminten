@@ -1,4 +1,4 @@
-import { Repository } from "@database/provider/interface"
+import { PrimeData, Repository } from "@database/provider/interface"
 import { Inject, Injectable } from "@nestjs/common"
 import { PIC } from "../../schema/pic.schema"
 import { DocumentExistsError, DocumentNotFoundError, MutateInSpec } from "couchbase"
@@ -13,34 +13,63 @@ export class PICRepositoryCouchbase implements Repository<PIC> {
         private readonly couchbaseInstance: CouchbaseInstance,
     ) { }
 
-    async findAll(options?: QueryOptions): Promise<PIC[]> {
+    async findAll(options?: QueryOptions): Promise<PIC[] | PrimeData<PIC>> {
         try {
-            const { query: baseQuery, params } = this.couchbaseInstance.buildN1qlQuery(
+            const { dataQuery, countQuery } = this.couchbaseInstance.buildN1qlQuery(
                 "pic",
                 options,
             )
 
-            // Add soft delete filter: show records where deleted_at is NULL or MISSING
-            let query = baseQuery
+            // Add soft delete filter: show records where deleted_at is NULL or MISSING or false
+            let query = dataQuery.query
+            let countQueryStr = countQuery?.query || ""
             if (options?.withSoft === undefined || options?.withSoft === false) {
+                const softDeleteFilter = "(`deleted_at` IS NULL OR `deleted_at` IS MISSING OR `deleted_at` = false)"
                 if (query.includes("WHERE")) {
-                    query = query.replace("WHERE", "WHERE (`deleted_at` IS NULL OR `deleted_at` IS MISSING) AND")
+                    query = query.replace("WHERE", `WHERE ${softDeleteFilter} AND`)
                 } else {
-                    // Find position before ORDER BY, LIMIT, or end
                     const orderByIndex = query.indexOf("ORDER BY")
                     const limitIndex = query.indexOf("LIMIT")
                     const insertPos = orderByIndex > -1 ? orderByIndex : (limitIndex > -1 ? limitIndex : query.length)
-                    query = query.slice(0, insertPos) + " WHERE (`deleted_at` IS NULL OR `deleted_at` IS MISSING) " + query.slice(insertPos)
+                    query = query.slice(0, insertPos) + ` WHERE ${softDeleteFilter} ` + query.slice(insertPos)
+                }
+                // Also update count query
+                if (countQueryStr) {
+                    if (countQueryStr.includes("WHERE")) {
+                        countQueryStr = countQueryStr.replace("WHERE", `WHERE ${softDeleteFilter} AND`)
+                    } else {
+                        countQueryStr = countQueryStr + ` WHERE ${softDeleteFilter}`
+                    }
                 }
             }
 
-            // console.log("PIC findAll query:", query)
-            // console.log("PIC findAll params:", params)
-
             const cluster = this.couchbaseInstance.getCluster()
-            const result = await cluster.query<PIC>(query, { parameters: params })
-            return result.rows
+            const result = await cluster.query<PIC>(query, {
+                parameters: dataQuery.params,
+            })
+
+            if (options?.withPagination) {
+                const countResult = await cluster.query(countQueryStr, {
+                    parameters: countQuery!.params,
+                })
+
+                const totalRecords = countResult.rows[0].totalRecords
+                const limit = dataQuery.params.limit
+                const offset = dataQuery.params.offset
+
+                return {
+                    data: result.rows,
+                    totalRecords,
+                    first: offset,
+                    rows: limit,
+                    totalPages: Math.ceil(totalRecords / limit),
+                    currentPage: Math.floor(offset / limit) + 1,
+                }
+            } else {
+                return result.rows
+            }
         } catch (error) {
+            console.error("PIC findAll error:", error)
             throw new Error(error)
         }
     }
