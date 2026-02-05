@@ -1,5 +1,5 @@
 import { LOV } from "@database/schema/lov.schema"
-import { Repository } from "@database/provider/interface"
+import { PrimeData, Repository } from "@database/provider/interface"
 import { Inject, Injectable } from "@nestjs/common"
 import { REPOSITORY_LOV } from "@shared/repository"
 import { DTOCreateLOV } from "./lov.dto.create"
@@ -17,7 +17,7 @@ export class LOVService {
    *
    * @returns { LOV[] }
    */
-  async all(config = {}): Promise<LOV[]> {
+  async all(config = {}): Promise<LOV[] | PrimeData<LOV>> {
     return await this.repoLOV.findAll({
       fields: [
         "group_name",
@@ -35,6 +35,7 @@ export class LOVService {
       },
       limit: 10,
       offset: 0,
+      withPagination: true,
     })
   }
 

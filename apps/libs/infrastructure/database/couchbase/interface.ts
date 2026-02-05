@@ -40,4 +40,5 @@ export interface QueryOptions {
     field: string
     direction?: "ASC" | "DESC"
   }
+  withPagination?: boolean
 }

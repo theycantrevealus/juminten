@@ -1,4 +1,3 @@
-import { CoreOauthService } from "apps/integration/core/oauth.service"
 import {
   ExecutionContext,
   ForbiddenException,
@@ -12,6 +11,7 @@ import { AuthGuard } from "@nestjs/passport"
 import { environmentName } from "@shared/environment"
 import { Cache, CACHE_MANAGER } from "@nestjs/cache-manager"
 import { IUser } from "@shared/interface/core.account"
+import { CoreOauthService } from "@integration/core/oauth.service"
 
 @Injectable()
 export class OAuth2Guard extends AuthGuard("jwt") {

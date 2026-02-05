@@ -36,11 +36,6 @@ export class CoreService {
         return response
       },
       (error: AxiosError) => {
-        // this.logger.error(
-        //   `[ERROR] ${error.config?.url} ${error.response}`,
-        //   "CoreService",
-        // )
-
         return Promise.reject(error)
       },
     )

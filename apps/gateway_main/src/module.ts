@@ -64,7 +64,6 @@ import { CoreModule } from "@integration/core/module"
       }),
       inject: [ConfigService],
     }),
-    // AccountModule,
     OAuthModule,
     LOVModule,
     PICModule,

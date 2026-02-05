@@ -91,7 +91,6 @@ export function unpad(s) {
   return s.replace(/^0+/, "")
 }
 
-// === DECIMAL OPEARTIONS
 export function Dec2Bin(n) {
   if (!checkDec(n) || n < 0) return 0
   return n.toString(2)
@@ -101,7 +100,6 @@ export function Dec2Hex(n) {
   return n.toString(16)
 }
 
-// === BINARY OPERATIONS
 export function Bin2Dec(n) {
   if (!checkBin(n)) return 0
   return parseInt(n, 2).toString(10)
@@ -111,7 +109,6 @@ export function Bin2Hex(n) {
   return parseInt(n, 2).toString(16)
 }
 
-// === HEXADECIMAL OPEARTIONS
 export function Hex2Bin(n) {
   const length = n.length / 2
   const result = new Uint8Array(length)
