@@ -24,4 +24,5 @@ export const mockPICRepository = {
     create: jest.fn().mockResolvedValue(mockPIC()),
     update: jest.fn().mockResolvedValue(mockPIC()),
     delete: jest.fn().mockResolvedValue(undefined),
+    deleteSoft: jest.fn().mockResolvedValue(undefined),
 }

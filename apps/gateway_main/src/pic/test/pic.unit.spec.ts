@@ -4,6 +4,7 @@ import { REPOSITORY_PIC } from "@shared/repository"
 import { mockPIC, mockPICRepository } from "./mock/pic.mock"
 import { DTOCreatePIC } from "../pic.dto.create"
 import { DTOUpdatePIC } from "../pic.dto.update"
+import { DTOPrimeTableQuery } from "../pic.dto.prime"
 
 describe("PIC Service", () => {
     let picService: PICService
@@ -44,6 +45,108 @@ describe("PIC Service", () => {
             expect(result[0]).toHaveProperty("name")
             expect(result[0]).toHaveProperty("msisdn")
             expect(result[0]).toHaveProperty("email")
+        })
+    })
+
+    describe("allPrime()", () => {
+        const mockPICArray = [
+            mockPIC("JohnDoe", "08123456789012", "john@example.com"),
+            mockPIC("JaneDoe", "08123456789013", "jane@example.com"),
+            mockPIC("BobSmith", "08123456789014", "bob@example.com"),
+        ]
+
+        beforeEach(() => {
+            mockPICRepository.findAll.mockResolvedValue(mockPICArray)
+        })
+
+        it("should return paginated data with default values", async () => {
+            const query: DTOPrimeTableQuery = {}
+            const result = await picService.allPrime(query)
+
+            expect(result).toHaveProperty("data")
+            expect(result).toHaveProperty("totalRecords", 3)
+            expect(result).toHaveProperty("first", 0)
+            expect(result).toHaveProperty("rows", 10)
+            expect(result).toHaveProperty("totalPages", 1)
+            expect(result).toHaveProperty("currentPage", 1)
+            expect(result).toHaveProperty("hasNextPage", false)
+            expect(result).toHaveProperty("hasPrevPage", false)
+        })
+
+        it("should apply pagination correctly", async () => {
+            const query: DTOPrimeTableQuery = { first: 0, rows: 2 }
+            const result = await picService.allPrime(query)
+
+            expect(result.data.length).toBe(2)
+            expect(result.totalRecords).toBe(3)
+            expect(result.totalPages).toBe(2)
+            expect(result.hasNextPage).toBe(true)
+            expect(result.hasPrevPage).toBe(false)
+        })
+
+        it("should apply pagination for second page", async () => {
+            const query: DTOPrimeTableQuery = { first: 2, rows: 2 }
+            const result = await picService.allPrime(query)
+
+            expect(result.data.length).toBe(1)
+            expect(result.currentPage).toBe(2)
+            expect(result.hasNextPage).toBe(false)
+            expect(result.hasPrevPage).toBe(true)
+        })
+
+        it("should apply sorting with sortField", async () => {
+            const query: DTOPrimeTableQuery = { sortField: "name", sortOrder: 1 }
+            await picService.allPrime(query)
+
+            expect(mockPICRepository.findAll).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    orderBy: { field: "name", direction: "ASC" },
+                }),
+            )
+        })
+
+        it("should apply DESC sorting when sortOrder is -1", async () => {
+            const query: DTOPrimeTableQuery = { sortField: "email", sortOrder: -1 }
+            await picService.allPrime(query)
+
+            expect(mockPICRepository.findAll).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    orderBy: { field: "email", direction: "DESC" },
+                }),
+            )
+        })
+
+        it("should filter by globalFilter on name", async () => {
+            const query: DTOPrimeTableQuery = { globalFilter: "john" }
+            const result = await picService.allPrime(query)
+
+            expect(result.data.length).toBe(1)
+            expect(result.data[0].name).toBe("JohnDoe")
+            expect(result.totalRecords).toBe(1)
+        })
+
+        it("should filter by globalFilter on email", async () => {
+            const query: DTOPrimeTableQuery = { globalFilter: "jane@" }
+            const result = await picService.allPrime(query)
+
+            expect(result.data.length).toBe(1)
+            expect(result.data[0].email).toBe("jane@example.com")
+        })
+
+        it("should filter by globalFilter on msisdn", async () => {
+            const query: DTOPrimeTableQuery = { globalFilter: "08123456789014" }
+            const result = await picService.allPrime(query)
+
+            expect(result.data.length).toBe(1)
+            expect(result.data[0].name).toBe("BobSmith")
+        })
+
+        it("should return empty when globalFilter matches nothing", async () => {
+            const query: DTOPrimeTableQuery = { globalFilter: "nonexistent" }
+            const result = await picService.allPrime(query)
+
+            expect(result.data.length).toBe(0)
+            expect(result.totalRecords).toBe(0)
         })
     })
 
@@ -100,4 +203,13 @@ describe("PIC Service", () => {
             expect(mockPICRepository.delete).toHaveBeenCalledWith(id)
         })
     })
+
+    describe("removeSoft()", () => {
+        it("should call repository deleteSoft with correct id", async () => {
+            const id = "pic::08123456789012"
+            await picService.removeSoft(id)
+            expect(mockPICRepository.deleteSoft).toHaveBeenCalledWith(id)
+        })
+    })
 })
+
