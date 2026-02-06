@@ -1,4 +1,4 @@
-import { DynamicModule, Global, Module } from "@nestjs/common"
+import { DynamicModule, Global, Module, Provider } from "@nestjs/common"
 import { CouchbaseConnectionOptions, ICouchBaseAsyncOptions } from "./interface"
 import { CONFIG_TOKEN, CONNECTION_TOKEN } from "./constant"
 import { Cluster, connect } from "couchbase"
@@ -32,7 +32,7 @@ export class CouchbaseModule {
         inject: [configToken],
       }
 
-      return [configProvider, connectionProvider]
+      return [configProvider, connectionProvider] as Provider[]
     })
 
     return {

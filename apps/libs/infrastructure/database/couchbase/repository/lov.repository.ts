@@ -17,7 +17,7 @@ export class LOVRepositoryCouchbase implements Repository<LOV> {
     private readonly couchbaseInstance: CouchbaseInstance,
   ) {}
 
-  async findAll(options?: QueryOptions): Promise<LOV[] | PrimeData<LOV>> {
+  async findAll(options: QueryOptions): Promise<LOV[] | PrimeData<LOV>> {
     try {
       if (options.withSoft === undefined || options.withSoft === false) {
         options.where = { ...options.where, deleted_at: false }
@@ -54,7 +54,7 @@ export class LOVRepositoryCouchbase implements Repository<LOV> {
         return result.rows
       }
     } catch (error) {
-      throw new Error(error)
+      throw new Error(`Error : ${error}`)
     }
   }
 
@@ -71,14 +71,14 @@ export class LOVRepositoryCouchbase implements Repository<LOV> {
       const bucket = this.couchbaseInstance.getBucket()
       const collection = bucket.collection("lov")
       const data = LOV.create(entity)
-      console.log(data)
+
       await collection.insert(buildId, data)
       return entity
     } catch (error) {
       if (error instanceof DocumentExistsError) {
         throw new Error(`Error: Document with key "${buildId}" already exists`)
       } else {
-        throw new Error(error)
+        throw new Error(`Error : ${error}`)
       }
     }
   }
@@ -93,7 +93,7 @@ export class LOVRepositoryCouchbase implements Repository<LOV> {
       if (error instanceof DocumentNotFoundError) {
         throw new Error(`Error: Document is not found`)
       } else {
-        throw new Error(error)
+        throw new Error(`Error : ${error}`)
       }
     }
   }
@@ -107,7 +107,7 @@ export class LOVRepositoryCouchbase implements Repository<LOV> {
       if (error instanceof DocumentNotFoundError) {
         throw new Error(`Error: Document is not found`)
       } else {
-        throw new Error(error)
+        throw new Error(`Error : ${error}`)
       }
     }
   }
@@ -123,7 +123,7 @@ export class LOVRepositoryCouchbase implements Repository<LOV> {
       if (error instanceof DocumentNotFoundError) {
         throw new Error(`Error: Document is not found`)
       } else {
-        throw new Error(error)
+        throw new Error(`Error : ${error}`)
       }
     }
   }

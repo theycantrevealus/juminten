@@ -45,11 +45,12 @@ import { CoreModule } from "@integration/core/module"
       {
         imports: [ConfigModule],
         useFactory: async (configService: ConfigService) => ({
-          connectionString: configService.get("couchbase.connectionString"),
-          username: configService.get("couchbase.username"),
-          password: configService.get("couchbase.password"),
-          scopeName: configService.get("couchbase.scope"),
-          bucketName: configService.get("couchbase.bucket"),
+          connectionString:
+            configService.get<string>("couchbase.connectionString") ?? "",
+          username: configService.get<string>("couchbase.username") ?? "",
+          password: configService.get<string>("couchbase.password") ?? "",
+          scopeName: configService.get<string>("couchbase.scope") ?? "",
+          bucketName: configService.get<string>("couchbase.bucket") ?? "",
         }),
         inject: [ConfigService],
       },
