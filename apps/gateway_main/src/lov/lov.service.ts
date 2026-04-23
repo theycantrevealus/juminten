@@ -50,7 +50,8 @@ export class LOVService {
       {
         ...payload,
       },
-      `lov::${payload.group_name}:${JSON.stringify(payload.set_value)}`,
+      `lov::${payload.group_name}:`,
+      `${JSON.stringify(payload.set_value)}`,
     )
   }
 

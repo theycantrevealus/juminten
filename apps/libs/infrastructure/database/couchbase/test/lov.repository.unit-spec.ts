@@ -72,13 +72,13 @@ describe("LOVRepositoryCouchbase", () => {
     })
 
     mockCluster.query
-      .mockResolvedValueOnce({ rows: [{ name: "A" }] }) // data
-      .mockResolvedValueOnce({ rows: [{ totalRecords: 1 }] }) // count
+      .mockResolvedValueOnce({ rows: [{ group_name: "A" }] })
+      .mockResolvedValueOnce({ rows: [{ totalRecords: 1 }] })
 
     const result = await repo.findAll({ withPagination: true })
 
     expect(result).toMatchObject({
-      data: [{ name: "A" }],
+      data: [{ group_name: "A" }],
       totalRecords: 1,
     })
   })
