@@ -3,14 +3,14 @@ import { IsNotEmpty, IsOptional, IsString } from "class-validator"
 export class DTOUpdateLOV {
   @IsString()
   @IsNotEmpty()
-  group_name: string
+  group_name!: string
 
   @IsNotEmpty()
   set_value: any
 
   @IsString()
   @IsOptional()
-  description: string
+  description: string = ""
 
   @IsOptional()
   additional: object | any

@@ -65,7 +65,7 @@ export class LOVRepositoryCouchbase implements Repository<LOV> {
   async create(entity: LOV, id: string): Promise<LOV> {
     const buildId =
       id || id !== ""
-        ? this.couchbaseInstance.formatId(id)
+        ? this.couchbaseInstance.hashId(id)
         : this.couchbaseInstance.generateId()
     try {
       const bucket = this.couchbaseInstance.getBucket()
@@ -87,6 +87,7 @@ export class LOVRepositoryCouchbase implements Repository<LOV> {
     try {
       const bucket = this.couchbaseInstance.getBucket()
       const collection = bucket.collection("lov")
+      entity.updated_at = new Date()
       await collection.upsert(id, entity)
       return entity
     } catch (error) {

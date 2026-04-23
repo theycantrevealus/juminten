@@ -10,9 +10,9 @@ import { Timestamp } from "./timestamp.schema"
  * @property { any | object } additional - Extra value store
  */
 export class LOV extends Timestamp {
-  group_name: string
+  group_name!: string
   set_value: any
-  description: string
+  description?: string
   additional: object | any
 
   static create(data: Partial<LOV>) {

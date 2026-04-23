@@ -1,7 +1,7 @@
 import { Bucket, Cluster } from "couchbase"
 import { CouchbaseConnectionOptions, QueryOptions } from "./interface"
 import { Injectable } from "@nestjs/common"
-import { randomUUID } from "crypto"
+import { randomUUID, hash } from "crypto"
 
 @Injectable()
 export class CouchbaseInstance {
@@ -15,7 +15,7 @@ export class CouchbaseInstance {
   }
 
   getScope(): string {
-    return this.options.scopeName
+    return this.options.scopeName ?? ""
   }
 
   getBucketName(): string {
@@ -28,6 +28,10 @@ export class CouchbaseInstance {
 
   generateId(): string {
     return randomUUID()
+  }
+
+  hashId(id: string): string {
+    return hash("sha256", id)
   }
 
   formatId(id): string {
