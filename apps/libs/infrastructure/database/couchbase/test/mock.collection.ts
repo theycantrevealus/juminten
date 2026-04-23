@@ -19,4 +19,5 @@ export const mockCouchbaseInstance = {
   buildN1qlQuery: jest.fn(),
   generateId: jest.fn(),
   hashId: jest.fn(),
+  formatId: jest.fn(),
 }
