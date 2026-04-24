@@ -62,13 +62,8 @@ export class LOVRepositoryCouchbase implements Repository<LOV> {
     throw new Error("Method not implemented.")
   }
 
-  async create(entity: LOV, id: string, hash: string = ""): Promise<LOV> {
-    const buildId =
-      id || id !== ""
-        ? hash !== ""
-          ? id + this.couchbaseInstance.hashId(hash)
-          : this.couchbaseInstance.formatId(id)
-        : this.couchbaseInstance.generateId()
+  async create(entity: LOV, id: string): Promise<LOV> {
+    const buildId = id || id !== "" ? id : this.couchbaseInstance.generateId()
     try {
       const bucket = this.couchbaseInstance.getBucket()
       const collection = bucket.collection("lov")

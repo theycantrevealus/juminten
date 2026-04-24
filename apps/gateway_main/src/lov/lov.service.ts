@@ -4,6 +4,7 @@ import { Inject, Injectable } from "@nestjs/common"
 import { REPOSITORY_LOV } from "@shared/repository"
 import { DTOCreateLOV } from "./lov.dto.create"
 import { DTOUpdateLOV } from "./lov.dto.update"
+import { hash } from "crypto"
 
 @Injectable()
 export class LOVService {
@@ -17,26 +18,32 @@ export class LOVService {
    *
    * @returns { LOV[] }
    */
-  async all(config = {}): Promise<LOV[] | PrimeData<LOV>> {
-    return await this.repoLOV.findAll({
-      fields: [
-        "group_name",
-        "set_value",
-        "description",
-        "additional",
-        "created_at",
-        "updated_at",
-        "deleted_at",
-      ],
-      withSoft: true,
-      orderBy: {
-        field: "group_name",
-        direction: "ASC",
-      },
-      limit: 10,
-      offset: 0,
-      withPagination: true,
-    })
+  async all(config: string): Promise<LOV[] | PrimeData<LOV>> {
+    try {
+      const parameter = JSON.parse(config) ?? {}
+      return await this.repoLOV.findAll({
+        where: parameter,
+        fields: [
+          "group_name",
+          "set_value",
+          "description",
+          "additional",
+          "created_at",
+          "updated_at",
+          "deleted_at",
+        ],
+        withSoft: true,
+        orderBy: {
+          field: "group_name",
+          direction: "ASC",
+        },
+        limit: 10,
+        offset: 0,
+        withPagination: true,
+      })
+    } catch (error) {
+      throw error
+    }
   }
 
   /**
@@ -50,8 +57,7 @@ export class LOVService {
       {
         ...payload,
       },
-      `lov::${payload.group_name}:`,
-      `${JSON.stringify(payload.set_value)}`,
+      `lov::${payload.group_name}:${hash("sha256", JSON.stringify(payload.set_value))}`,
     )
   }
 

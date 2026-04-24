@@ -10,49 +10,133 @@ export class CouchbaseInstance {
     private readonly options: CouchbaseConnectionOptions,
   ) {}
 
+  /**
+   * Get configured cluster
+   * @returns { Cluster }
+   */
   getCluster(): Cluster {
     return this.cluster
   }
 
+  /**
+   * Get configured scope
+   * @returns { string }
+   */
   getScope(): string {
     return this.options.scopeName ?? ""
   }
 
+  /**
+   * Get configured bucket name
+   * @returns { string }
+   */
   getBucketName(): string {
     return this.options.bucketName
   }
 
+  /**
+   * Get bucket instance
+   * @returns { Bucket }
+   */
   getBucket(): Bucket {
     return this.cluster.bucket(this.options.bucketName)
   }
 
+  /**
+   * Generate random uuid
+   * @returns { string }
+   */
   generateId(): string {
     return randomUUID()
   }
 
+  /**
+   * Hash given string
+   * @param { string } id - id string to format
+   * @returns { string }
+   */
   hashId(id: string): string {
     return hash("sha256", id)
   }
 
+  /**
+   * Format json format notation
+   *
+   * @param { string } id - id string to format
+   * @returns { string }
+   */
   formatId(id): string {
     return id.replace(/[:{}"]/g, "_")
   }
 
+  /**
+   * Build where param clause from JSON clause
+   *
+   * @param { Record<string, any> } params - parameter
+   * @param { Record<string, any> } where - where clause
+   * @returns
+   */
   private buildWhereClause(
     params: Record<string, any>,
     where?: Record<string, any>,
   ): string {
     if (!where || Object.keys(where).length === 0) return ""
 
-    const conditions = Object.entries(where).map(([key, value]) => {
-      if (value === null) return `\`${key}\` IS NULL`
-      if (value === undefined) return `\`${key}\` IS MISSING`
+    const conditions: string[] = []
 
-      params[key] = value
-      return `\`${key}\` = $${key}`
-    })
+    for (const [key, value] of Object.entries(where)) {
+      const field = `\`${key}\``
 
-    return ` WHERE ${conditions.join(" AND ")}`
+      // handle primitive (fallback to eq)
+      if (typeof value !== "object" || value === null) {
+        if (value === null) {
+          conditions.push(`${field} IS NULL`)
+        } else if (value === undefined) {
+          conditions.push(`${field} IS MISSING`)
+        } else {
+          params[key] = value
+          conditions.push(`${field} = $${key}`)
+        }
+        continue
+      }
+
+      // operator handling
+      for (const [op, v] of Object.entries(value)) {
+        const paramKey = `${key}_${op}`
+
+        switch (op) {
+          case "eq":
+            params[paramKey] = v
+            conditions.push(`${field} = $${paramKey}`)
+            break
+
+          case "ne":
+            params[paramKey] = v
+            conditions.push(`${field} != $${paramKey}`)
+            break
+
+          case "startsWith":
+            params[paramKey] = `${v}%`
+            conditions.push(`${field} LIKE $${paramKey}`)
+            break
+
+          case "endsWith":
+            params[paramKey] = `%${v}`
+            conditions.push(`${field} LIKE $${paramKey}`)
+            break
+
+          case "contains":
+            params[paramKey] = `%${v}%`
+            conditions.push(`${field} LIKE $${paramKey}`)
+            break
+
+          default:
+            throw new Error(`Unsupported operator: ${op}`)
+        }
+      }
+    }
+
+    return conditions.length ? ` WHERE ${conditions.join(" AND ")}` : ""
   }
 
   /**

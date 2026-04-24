@@ -9,6 +9,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   UseGuards,
   UseInterceptors,
 } from "@nestjs/common"
@@ -24,8 +25,8 @@ export class LOVController {
   @UseInterceptors(GeneralInterceptor)
   @UseGuards(OAuth2Guard)
   @Authorization(true)
-  async all() {
-    return await this.lovService.all()
+  async all(@Query("lazyEvent") parameter: string) {
+    return await this.lovService.all(parameter)
   }
 
   @Post()

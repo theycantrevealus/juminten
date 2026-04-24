@@ -15,7 +15,7 @@ export interface PrimeData<T> {
 export interface Repository<T> {
   findAll(options?: QueryOptions): Promise<T[] | PrimeData<T>>
   findOne(id: string): Promise<T | null>
-  create(entity: T, id?: string, hash?: string): Promise<T>
+  create(entity: T, id?: string): Promise<T>
   update(id: string, entity: Partial<T>): Promise<Partial<T>>
   delete(id: string): Promise<void>
   deleteSoft(id: string): Promise<void>
