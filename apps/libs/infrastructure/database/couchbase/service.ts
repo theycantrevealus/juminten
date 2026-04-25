@@ -87,7 +87,6 @@ export class CouchbaseInstance {
     for (const [key, value] of Object.entries(where)) {
       const field = `\`${key}\``
 
-      // handle primitive (fallback to eq)
       if (typeof value !== "object" || value === null) {
         if (value === null) {
           conditions.push(`${field} IS NULL`)
@@ -100,7 +99,6 @@ export class CouchbaseInstance {
         continue
       }
 
-      // operator handling
       for (const [op, v] of Object.entries(value)) {
         const paramKey = `${key}_${op}`
 

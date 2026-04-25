@@ -25,8 +25,32 @@ export class LOVController {
   @UseInterceptors(GeneralInterceptor)
   @UseGuards(OAuth2Guard)
   @Authorization(true)
-  async all(@Query("lazyEvent") parameter: string) {
-    return await this.lovService.all(parameter)
+  async all(
+    @Query("fields") fields: string,
+    @Query("search") search: string,
+    @Query("sort") sort: string,
+    @Query("withSoft") withSoft: boolean,
+    @Query("limit") limit: number,
+    @Query("offset") offset: number,
+    @Query("withPagination") withPagination: boolean,
+  ) {
+    return await this.lovService.all(
+      fields.split(",") ?? [
+        "group_name",
+        "set_value",
+        "description",
+        "additional",
+        "created_at",
+        "updated_at",
+        "deleted_at",
+      ],
+      search,
+      sort,
+      withSoft,
+      limit,
+      offset,
+      withPagination,
+    )
   }
 
   @Post()
