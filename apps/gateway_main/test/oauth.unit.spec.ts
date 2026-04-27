@@ -31,7 +31,6 @@ describe("OAuth Test", () => {
     jest.spyOn(coreOAuthService, "signIn")
     await oAuthService
       .signIn({
-        locale: "test",
         type: "test",
         username: "test",
         password: "test",
