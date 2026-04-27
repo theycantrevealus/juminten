@@ -65,6 +65,7 @@ import { CoreModule } from "@integration/core/module"
     }),
     OAuthModule,
     LOVModule,
+    AccountModule,
   ],
 })
 export class GatewayMainModule {}
