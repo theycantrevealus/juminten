@@ -61,8 +61,8 @@ export abstract class BaseCouchbaseRepository<T> implements Repository<T> {
     }
   }
 
-  async create(entity: T, id: string): Promise<T> {
-    const buildId = id || id !== "" ? id : this.couchbaseInstance.generateId()
+  async create(entity: T, id?: string): Promise<T> {
+    const buildId = id?.trim() ? id : this.couchbaseInstance.generateId()
     try {
       const bucket = this.couchbaseInstance.getBucket()
       const scope = bucket.scope(this.couchbaseInstance.getScope())

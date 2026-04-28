@@ -2,7 +2,8 @@ import { Account } from "@database/schema/account.schema"
 import { PrimeData, Repository } from "@database/provider/interface"
 import { Inject, Injectable } from "@nestjs/common"
 import { REPOSITORY_ACCOUNT } from "@shared/repository"
-import { DTOAccountAdd } from "./account.dto.add"
+import { DTOCreateAccount } from "./dto/account.dto.create"
+import { DTOUpdateAccount } from "./dto/account.dto.update"
 
 @Injectable()
 export class AccountService {
@@ -43,5 +44,44 @@ export class AccountService {
     }
   }
 
-  async add(createAccount: DTOAccountAdd) {}
+  /**
+   * Add new Account from FE
+   *
+   * @param { DTOCreateAccount } payload - Account data to create
+   * @return { void }
+   */
+  async add(payload: DTOCreateAccount): Promise<void> {
+    await this.repoAccount.create({
+      ...payload,
+      role: "merchant"
+    })
+  }
+
+  /**
+   * Update LOV
+   *
+   * @param { string } id - Account ID
+   * @param { DTOUpdateAccount } payload
+   */
+  async update(id: string, payload: DTOUpdateAccount): Promise<void> {
+    await this.repoAccount.update(id, payload)
+  }
+
+  /**
+   * Hard-delete account
+   *
+   * @param { string } id - Account ID
+   */
+  async remove(id: string): Promise<void> {
+    await this.repoAccount.delete(id)
+  }
+
+  /**
+   * Soft-delete account
+   *
+   * @param { string } id - Account ID
+   */
+  async removeSoft(id: string): Promise<void> {
+    await this.repoAccount.deleteSoft(id)
+  }
 }

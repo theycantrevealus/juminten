@@ -35,10 +35,10 @@ export class Account extends Timestamp {
   job_level!: string
   phone!: string
   email!: string
-  birthdate!: Date
+  birthdate!: string
   status!: string
   line_id!: string
-  type!: "merchant" | "business"
+  type!: string // "merchant" | "business"
   role!: string // object id
   superior_local!: string // object id ref
   superior_hq!: string // object id ref
