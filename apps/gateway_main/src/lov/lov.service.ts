@@ -5,6 +5,7 @@ import { REPOSITORY_LOV } from "@shared/repository"
 import { DTOCreateLOV } from "./lov.dto.create"
 import { DTOUpdateLOV } from "./lov.dto.update"
 import { hash } from "crypto"
+import { QueryOptions } from "@database/couchbase/interface"
 
 @Injectable()
 export class LOVService {
@@ -16,30 +17,33 @@ export class LOVService {
   /**
    * Return all LOV data partially by filter, projection, and etc
    *
+   * @param { string } config - Config for filter
    * @returns { LOV[] }
    */
-  async all(config: string): Promise<LOV[] | PrimeData<LOV>> {
+  async all(
+    fields: string[] = [],
+    search: string,
+    sort: string,
+    withSoft: boolean = false,
+    limit: number = 10,
+    offset: number = 0,
+    withPagination: boolean = true,
+  ): Promise<LOV[] | PrimeData<LOV>> {
     try {
-      const parameter = JSON.parse(config) ?? {}
+      const parameter = JSON.parse(search) ?? {}
+      const order = JSON.parse(sort) ?? {
+        field: "group_name",
+        direction: "ASC",
+      }
+
       return await this.repoLOV.findAll({
         where: parameter,
-        fields: [
-          "group_name",
-          "set_value",
-          "description",
-          "additional",
-          "created_at",
-          "updated_at",
-          "deleted_at",
-        ],
-        withSoft: true,
-        orderBy: {
-          field: "group_name",
-          direction: "ASC",
-        },
-        limit: 10,
-        offset: 0,
-        withPagination: true,
+        fields: fields,
+        withSoft: withSoft,
+        orderBy: order,
+        limit: limit,
+        offset: offset,
+        withPagination: withPagination,
       })
     } catch (error) {
       throw error
@@ -63,6 +67,10 @@ export class LOVService {
 
   /**
    * Update LOV
+   *
+   * @param { string } id - id for edit
+   * @param { DTOUpdateLOV } paylaod - data for update
+   * @returns { void }
    */
   async update(id: string, payload: DTOUpdateLOV): Promise<void> {
     await this.repoLOV.update(id, payload)
