@@ -20,15 +20,15 @@ import { Timestamp } from "./timestamp.schema";
  * @property { string } prov - Province name
  * @property { string } region - Region name
  * @property { string } city - City name
- * @property { string | null } [area_id] - Area identifier
- * @property { string | null } [prov_id] - Province identifier
- * @property { string | null } [region_id] - Region identifier
- * @property { string | null } [city_id] - City identifier
+ * @property { string } [area_id] - Area identifier
+ * @property { string } [prov_id] - Province identifier
+ * @property { string } [region_id] - Region identifier
+ * @property { string } [city_id] - City identifier
  * @property { string } status - Location status
  * @property { string } timezone - Timezone value
- * @property { string[] | null } region_detail - Region detail hierarchy
- * @property { string[] | null } prov_detail - Province detail hierarchy
- * @property { string[] | null } city_detail - City detail hierarchy
+ * @property { string[] } [region_detail] - Region detail hierarchy
+ * @property { string[] } [prov_detail] - Province detail hierarchy
+ * @property { string[] } [city_detail] - City detail hierarchy
  * @property { string|null } [created_by] - Creator account identifier
  */
 export class Location extends Timestamp {
@@ -46,16 +46,16 @@ export class Location extends Timestamp {
   prov!: string
   region!: string
   city!: string
-  area_id?: string | null
-  prov_id?: string | null
-  region_id?: string | null
-  city_id?: string | null
+  area_id?: string
+  prov_id?: string
+  region_id?: string
+  city_id?: string
   status!: string
   timezone!: string
-  region_detail!: string[] | null
-  prov_detail!: string[] | null
-  city_detail!: string[] | null
-  created_by?: string | null // Account
+  region_detail?: string[]
+  prov_detai?: string[]
+  city_detail?: string[]
+  created_by?: string // Account
 
   static create(data: Partial<Location>) {
     return Object.assign(new Location(), data)
