@@ -65,7 +65,8 @@ export abstract class BaseCouchbaseRepository<T> implements Repository<T> {
     const buildId = id || id !== "" ? id : this.couchbaseInstance.generateId()
     try {
       const bucket = this.couchbaseInstance.getBucket()
-      const collection = bucket.collection(this.collectionName)
+      const scope = bucket.scope(this.couchbaseInstance.getScope())
+      const collection = scope.collection(this.collectionName)
       const data = this.factory ? this.factory(entity) : entity
 
       await collection.insert(buildId, data)
@@ -82,7 +83,8 @@ export abstract class BaseCouchbaseRepository<T> implements Repository<T> {
   async update(id: string, entity: Partial<T>): Promise<Partial<T>> {
     try {
       const bucket = this.couchbaseInstance.getBucket()
-      const collection = bucket.collection(this.collectionName)
+      const scope = bucket.scope(this.couchbaseInstance.getScope())
+      const collection = scope.collection(this.collectionName)
 
       await collection.upsert(id, {
         ...entity,
@@ -102,7 +104,9 @@ export abstract class BaseCouchbaseRepository<T> implements Repository<T> {
   async delete(id: string): Promise<void> {
     try {
       const bucket = this.couchbaseInstance.getBucket()
-      const collection = bucket.collection(this.collectionName)
+      const scope = bucket.scope(this.couchbaseInstance.getScope())
+      const collection = scope.collection(this.collectionName)
+
       await collection.remove(id)
     } catch (error) {
       if (error instanceof DocumentNotFoundError) {
@@ -116,7 +120,9 @@ export abstract class BaseCouchbaseRepository<T> implements Repository<T> {
   async deleteSoft(id: string): Promise<void> {
     try {
       const bucket = this.couchbaseInstance.getBucket()
-      const collection = bucket.collection(this.collectionName)
+      const scope = bucket.scope(this.couchbaseInstance.getScope())
+      const collection = scope.collection(this.collectionName)
+
       await collection.mutateIn(id, [
         MutateInSpec.upsert("deleted_at", new Date()),
       ])
