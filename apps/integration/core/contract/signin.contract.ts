@@ -1,5 +1,4 @@
 export interface ContractSignIn {
-  locale: string
   type: string
   username: string
   password: string

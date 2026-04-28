@@ -1,12 +1,13 @@
 import {
-  IsDate,
+  IsArray,
+  IsDateString,
   IsEmail,
   IsOptional,
   IsPhoneNumber,
   IsString,
 } from "class-validator"
 
-export class DTOAccountAdd {
+export class DTOUpdateAccount {
   @IsString()
   user_id: string
 
@@ -34,6 +35,9 @@ export class DTOAccountAdd {
   @IsEmail()
   email: string
 
+  @IsDateString()
+  birthdate: string
+
   @IsString()
   status: string
 
@@ -45,8 +49,20 @@ export class DTOAccountAdd {
   type: string = "merchant"
 
   @IsString()
+  superior_local: string
+
+  @IsString()
+  superior_hq: string
+
+  @IsString()
+  manager_id: string
+
+  @IsString()
   agent: string
 
   @IsString()
   legacy_user_id: string
+
+  @IsArray()
+  account_location: string[] = []
 }

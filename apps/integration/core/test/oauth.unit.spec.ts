@@ -69,7 +69,6 @@ describe("E2E Core OAuth Test", () => {
     jest.spyOn(coreService, "post").mockResolvedValue(mockResponse)
 
     const result = await coreOAuthService.signIn({
-      locale: "test",
       username: "test",
       password: "test",
       client_id: "test",
@@ -79,7 +78,7 @@ describe("E2E Core OAuth Test", () => {
     expect(coreService.post).toHaveBeenCalledWith(
       "/gateway/v3.0/oauth/signin",
       {
-        locale: "test",
+
         username: "test",
         password: "test",
         client_id: "test",

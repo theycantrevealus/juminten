@@ -2,9 +2,6 @@ import { IsString } from "class-validator"
 
 export class DTOSignIn {
   @IsString()
-  locale: string
-
-  @IsString()
   type: string
 
   @IsString()
