@@ -13,7 +13,7 @@ export class Role extends Timestamp {
   role_id!: string
   name!: string
   desc!: string
-  authorizes!: []
+  authorizes!: any[]
   status!: string
 
   static create(data: Partial<Role>) {

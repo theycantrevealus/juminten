@@ -14,6 +14,7 @@ import { LOVModule } from "./lov/lov.module"
 import { CacheModule } from "@nestjs/cache-manager"
 import { CoreModule } from "@integration/core/module"
 import { LocationModule } from "./location/location.module"
+import { RoleModule } from "./role/role.module"
 
 @Module({
   imports: [
@@ -69,6 +70,7 @@ import { LocationModule } from "./location/location.module"
     LOVModule,
     AccountModule,
     LocationModule,
+    RoleModule,
   ],
 })
 export class GatewayMainModule {}
