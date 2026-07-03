@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "types": ["node", "jest"],
+    "types": ["vitest/globals", "node"],
     "module": "commonjs",
     "declaration": true,
     "removeComments": true,
