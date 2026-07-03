@@ -1,13 +1,5 @@
 describe("E2E - Core", () => {
-  beforeEach(async () => {
-    //
-  })
-
-  it("Should provide service once initialize", () => {
-    //
-  })
-
-  afterAll(async () => {
-    //
+  it("should run test", () => {
+    expect(5).toBeGreaterThan(0)
   })
 })
