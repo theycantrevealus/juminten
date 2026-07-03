@@ -68,8 +68,7 @@ export function createWinstonAsyncProviders(
   if (options.useClass) {
     const useClass = options.useClass as Type<WinstonModuleOptionsFactory>
     providers.push(
-      ...[
-        {
+      {
           provide: WINSTON_MODULE_OPTIONS,
           useFactory: async (optionsFactory: WinstonModuleOptionsFactory) =>
             await optionsFactory.createWinstonModuleOptions(),
@@ -79,7 +78,6 @@ export function createWinstonAsyncProviders(
           provide: useClass,
           useClass,
         },
-      ],
     )
   }
 
