@@ -17,13 +17,27 @@ export class LOVService {
   /**
    * Return all LOV data partially by filter, projection, and etc
    *
-   * @param { string } config - Config for filter
+   * @param { string[] } fields - Fields name to show
+   * @param { string } search - Keyword for data search
+   * @param { any } sort - Sort order
+   * @param { boolean } withSoft - If set to true, it will retrieve all deleted data
+   * @param { number } limit - Data for one page
+   * @param { number } offset - Data start
+   * @param { boolean } withPagination - Option for pagination
    * @returns { LOV[] }
    */
   async all(
-    fields: string[] = [],
+    fields: string[] = [
+      "group_name",
+      "set_value",
+      "description",
+      "additional",
+      "created_at",
+      "updated_at",
+      "deleted_at",
+    ],
     search: string,
-    sort: string,
+    sort: any,
     withSoft: boolean = false,
     limit: number = 10,
     offset: number = 0,
@@ -69,7 +83,7 @@ export class LOVService {
    * Update LOV
    *
    * @param { string } id - id for edit
-   * @param { DTOUpdateLOV } paylaod - data for update
+   * @param { DTOUpdateLOV } payload - data for update
    * @returns { void }
    */
   async update(id: string, payload: DTOUpdateLOV): Promise<void> {

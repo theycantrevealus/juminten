@@ -13,14 +13,14 @@
   "transformIgnorePatterns": ["<rootDir>/node_modules/", "<rootDir>/dist/"],
   "collectCoverage": true,
   "collectCoverageFrom": [
-    "<rootDir>/apps/**/*.controller.{js,jsx,ts,tsx}",
+    "<rootDir>/apps/gateway_main/*.controller.{js,jsx,ts,tsx}",
     "!<rootDir>/node_modules/",
     "!<rootDir>/**/*.mock.{js,jsx,ts,tsx}"
   ],
   "coverageThreshold": {
     "global": {
-      "lines": 1,
-      "statements": 1
+      "lines": 10,
+      "statements": 10
     }
   },
   "coverageDirectory": "./coverage"

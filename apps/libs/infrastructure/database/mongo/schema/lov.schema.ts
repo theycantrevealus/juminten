@@ -9,13 +9,13 @@ export type LovDocument = LOV & Document
 @Schema()
 export class LOV {
   @Prop({ type: SchemaTypes.String })
-  group_name: string
+  group_name!: string
 
   @Prop({ type: SchemaTypes.String, unique: true })
   set_value: any
 
   @Prop({ type: SchemaTypes.String })
-  description: string
+  description?: string
 
   @Prop({ type: mongoose.Schema.Types.Mixed })
   additional: object | any
@@ -28,16 +28,16 @@ export class LOV {
     type: SchemaTypes.Date,
     default: () => new TimeManagement().getTimezone("Asia/Jakarta"),
   })
-  created_at: Date
+  created_at?: Date
 
   @Prop({
     type: SchemaTypes.Date,
     default: () => new TimeManagement().getTimezone("Asia/Jakarta"),
   })
-  updated_at: Date
+  updated_at?: Date
 
   @Prop({ type: SchemaTypes.Mixed, default: null })
-  deleted_at: Date | null
+  deleted_at?: Date | null
 }
 
 export const LovSchema = SchemaFactory.createForClass(LOV)

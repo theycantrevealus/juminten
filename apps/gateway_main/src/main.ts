@@ -11,46 +11,52 @@ import { CommonErrorFilter } from "@filter/common"
 import * as winston from "winston"
 
 async function bootstrap() {
-  const fastifyAdapter = new FastifyAdapter({
-    logger: false,
-    bodyLimit: 102457600,
-    routerOptions: {
-      ignoreTrailingSlash: true,
-      ignoreDuplicateSlashes: true,
-    },
-  })
+  try {
+    const fastifyAdapter = new FastifyAdapter({
+      logger: false,
+      bodyLimit: 102457600,
+      routerOptions: {
+        ignoreTrailingSlash: true,
+        ignoreDuplicateSlashes: true,
+      },
+    })
 
-  const app = await NestFactory.create<NestFastifyApplication>(
-    GatewayMainModule,
-    fastifyAdapter,
-    {
-      bodyParser: false,
-      logger: ["verbose", "error", "warn"],
-    },
-  )
+    const app = await NestFactory.create<NestFastifyApplication>(
+      GatewayMainModule,
+      fastifyAdapter,
+      {
+        bodyParser: false,
+        // logger: ["verbose", "error", "warn"],
+        logger: ["error", "warn", "log", "debug", "verbose"],
+      },
+    )
 
-  const logger = winston.createLogger({
-    transports: WinstonCustomTransports[environmentName],
-    levels: {
-      error: 0,
-      warn: 1,
-      info: 2,
-    },
-  })
+    const logger = winston.createLogger({
+      transports: WinstonCustomTransports[environmentName],
+      levels: {
+        error: 0,
+        warn: 1,
+        info: 2,
+      },
+    })
 
-  app.useGlobalFilters(new CommonErrorFilter(logger))
+    app.useGlobalFilters(new CommonErrorFilter(logger))
 
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true,
-      transform: true,
-    }),
-  )
+    app.useGlobalPipes(
+      new ValidationPipe({
+        whitelist: true,
+        transform: true,
+      }),
+    )
 
-  app.enableVersioning({
-    type: VersioningType.URI,
-  })
-  app.enableCors()
-  await app.listen(process.env.NODE_PORT ?? 3000)
+    app.enableVersioning({
+      type: VersioningType.URI,
+    })
+    app.enableCors()
+    await app.listen(process.env.NODE_PORT ?? 3000)
+  } catch (err: any) {
+    console.error(err)
+    console.dir(err, { depth: null })
+  }
 }
 bootstrap()

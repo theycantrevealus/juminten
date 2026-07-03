@@ -6,19 +6,19 @@ export type RoleDocument = HydratedDocument<Role>
 @Schema()
 export class Role {
   @Prop({ type: SchemaTypes.String })
-  role_id: string
+  role_id!: string
 
   @Prop({ type: SchemaTypes.String })
-  name: string
+  name!: string
 
   @Prop({ type: SchemaTypes.String })
-  desc: string
+  desc?: string
 
   @Prop({ type: SchemaTypes.Array })
-  authorizes: []
+  authorizes?: []
 
   @Prop({ type: SchemaTypes.String })
-  status: string
+  status!: string
 }
 
 export const RoleSchema = SchemaFactory.createForClass(Role)

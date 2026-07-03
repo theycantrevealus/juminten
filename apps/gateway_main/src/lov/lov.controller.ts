@@ -35,15 +35,7 @@ export class LOVController {
     @Query("withPagination") withPagination: boolean,
   ) {
     return await this.lovService.all(
-      fields.split(",") ?? [
-        "group_name",
-        "set_value",
-        "description",
-        "additional",
-        "created_at",
-        "updated_at",
-        "deleted_at",
-      ],
+      fields?.split(","),
       search,
       sort,
       withSoft,

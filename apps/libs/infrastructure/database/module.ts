@@ -1,10 +1,5 @@
 import { DynamicModule, InjectionToken, Module, Provider } from "@nestjs/common"
 import { RepositoryFeature } from "./interface"
-import { MongooseModule } from "@nestjs/mongoose"
-import { REPOSITORY_LOV } from "@shared/repository"
-import { LOVRepositoryCouchbase } from "./couchbase/repository/lov.repository"
-import { features } from "node:process"
-import { ModuleRef } from "@nestjs/core"
 import { createRepositoryProvider } from "./function"
 
 @Module({})
@@ -14,6 +9,7 @@ export class RepositoryModule {
     inject?: any[]
     useFactory: (...args: any[]) => RepositoryFeature[]
     providers: InjectionToken[]
+    isGlobal?: boolean
   }): DynamicModule {
     const repositoryFeaturesProvider: Provider = {
       provide: "REPOSITORY_FEATURES",
@@ -26,6 +22,7 @@ export class RepositoryModule {
     )
 
     return {
+      global: options.isGlobal,
       module: RepositoryModule,
       imports: options.imports ?? [],
       providers: [repositoryFeaturesProvider, ...repositoryProviders],
