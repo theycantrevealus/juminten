@@ -11,7 +11,9 @@
     "prepare": "husky",
     "release": "semantic-release",
     "start:webpack:gateway_main": "nest build gateway_main --webpack --webpackPath ./webpack.config.js --watch",
-    "start:webpack:consumer_redeem": "nest build consumer_redeem --webpack --webpackPath ./webpack.config.js --watch"
+    "start:webpack:consumer_redeem": "nest build consumer_redeem --webpack --webpackPath ./webpack.config.js --watch",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix"
   },
   "devDependencies": {
     "@commitlint/cli": "^20.5.2",
@@ -29,13 +31,12 @@
     "@vitest/coverage-v8": "^4.1.9",
     "copy-webpack-plugin": "^14.0.0",
     "docdash": "^2.0.2",
-    "eslint": "^10.6.0",
-    "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-import-x": "^4.17.1",
     "eslint-plugin-jsdoc": "^63.0.10",
-    "eslint-plugin-prettier": "^5.5.5",
     "husky": "^9.1.7",
+    "jest": "^30.3.0",
+    "oxlint": "^1.72.0",
     "prettier": "^3.8.3",
     "run-script-webpack-plugin": "^0.2.3",
     "semantic-release": "^25.0.5",
