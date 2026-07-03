@@ -1,5 +1,7 @@
+import { vi } from "vitest"
+
 export const mockOAuthService = {
-  signIn: jest.fn().mockResolvedValue({
+  signIn: vi.fn().mockResolvedValue({
     access_token: "",
   }),
 }
