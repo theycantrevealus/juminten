@@ -5,7 +5,6 @@ import { REPOSITORY_LOV } from "@shared/repository"
 import { DTOCreateLOV } from "./lov.dto.create"
 import { DTOUpdateLOV } from "./lov.dto.update"
 import { hash } from "crypto"
-import { QueryOptions } from "@database/couchbase/interface"
 
 @Injectable()
 export class LOVService {

@@ -1,4 +1,4 @@
-import { InjectionToken, Provider } from "@nestjs/common"
+import { InjectionToken } from "@nestjs/common"
 
 export interface RepositoryFeature {
   provider: symbol | InjectionToken

@@ -2,9 +2,8 @@ import { ArgumentsHost } from "@nestjs/common"
 import { GlobalResponse } from "@shared/interface/global.response"
 import { responseCode } from "@shared/response.code"
 import { hasSameKeys } from "@util/filter"
-import { isExpressRequest } from "@util/http"
 import { isJSON } from "class-validator"
-import { FastifyReply, FastifyRequest } from "fastify"
+import { FastifyReply } from "fastify"
 import { Logger } from "winston"
 
 export async function errorHttpHandler(
@@ -14,10 +13,10 @@ export async function errorHttpHandler(
 ) {
   const ctx = host.switchToHttp()
   const response = ctx.getResponse<FastifyReply>()
-  const request = ctx.getRequest()
-  const method = isExpressRequest(request)
-    ? request.method
-    : (request as FastifyRequest).method
+  // const request = ctx.getRequest()
+  // const method = isExpressRequest(request)
+  //   ? request.method
+  //   : (request as FastifyRequest).method
 
   let responseSet: GlobalResponse = {
     code: responseCode.CODE_INTERNAL_ERROR.customCode,

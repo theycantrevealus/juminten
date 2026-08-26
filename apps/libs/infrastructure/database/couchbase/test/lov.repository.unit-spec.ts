@@ -86,7 +86,7 @@ describe("LOVRepositoryCouchbase", () => {
   it("should upsert document", async () => {
     mockCollection.upsert.mockResolvedValue({})
 
-    const result = await repo.update("id1", { group_name: "updated" })
+    await repo.update("id1", { group_name: "updated" })
 
     expect(mockCollection.upsert).toHaveBeenCalledWith(
       "id1",

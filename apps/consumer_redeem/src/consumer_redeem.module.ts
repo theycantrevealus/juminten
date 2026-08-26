@@ -99,6 +99,6 @@ import { WinstonCustomTransports } from "@module/logger/transport"
 })
 export class ConsumerRedeemModule implements OnApplicationShutdown {
   onApplicationShutdown(signal?: string) {
-    console.log("Application shutdown")
+    console.log(`Application shutdown : ${signal}`)
   }
 }

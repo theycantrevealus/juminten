@@ -27,7 +27,6 @@ import {
   WinstonLogCreator,
 } from "@module/logger/transport"
 import { environmentName } from "@shared/environment"
-import { TimeManagement } from "@util/time"
 
 @Injectable()
 export class KafkaService implements OnModuleInit, OnModuleDestroy {
@@ -163,14 +162,14 @@ export class KafkaService implements OnModuleInit, OnModuleDestroy {
     try {
       if (!this.producer) {
         this.logger.error("There is no producer, unable to send message.")
-        return
+        return []
       }
 
       // const serializedPacket = await this.serializer.serialize(message)
       // return await this.producer.send(serializedPacket)
 
       return await this.producer.send({
-        topic: message.topic,
+        topic: message.topic ?? "",
         messages: message.messages,
         acks: message.acks,
         timeout: message.timeout,
@@ -311,7 +310,6 @@ export class KafkaService implements OnModuleInit, OnModuleDestroy {
         isStale,
         // pause,
       }) => {
-        const TM = new TimeManagement()
         const topic = batch.topic
         const partition = batch.partition
 

@@ -1,11 +1,5 @@
 import { Provider, Type } from "@nestjs/common"
-import {
-  createLogger,
-  format,
-  Logger,
-  LoggerOptions,
-  transports,
-} from "winston"
+import { createLogger, Logger, LoggerOptions } from "winston"
 
 import { WinstonLogger } from "./class"
 import {
@@ -69,15 +63,15 @@ export function createWinstonAsyncProviders(
     const useClass = options.useClass as Type<WinstonModuleOptionsFactory>
     providers.push(
       {
-          provide: WINSTON_MODULE_OPTIONS,
-          useFactory: async (optionsFactory: WinstonModuleOptionsFactory) =>
-            await optionsFactory.createWinstonModuleOptions(),
-          inject: [useClass],
-        },
-        {
-          provide: useClass,
-          useClass,
-        },
+        provide: WINSTON_MODULE_OPTIONS,
+        useFactory: async (optionsFactory: WinstonModuleOptionsFactory) =>
+          await optionsFactory.createWinstonModuleOptions(),
+        inject: [useClass],
+      },
+      {
+        provide: useClass,
+        useClass,
+      },
     )
   }
 

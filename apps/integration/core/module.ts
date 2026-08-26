@@ -1,5 +1,5 @@
 import { HttpModule } from "@nestjs/axios"
-import { DynamicModule, Global, Module, Provider } from "@nestjs/common"
+import { DynamicModule, Global, Module } from "@nestjs/common"
 import { CoreService } from "./service"
 import { CoreOauthService } from "./oauth.service"
 import { CoreUserService } from "./user.service"

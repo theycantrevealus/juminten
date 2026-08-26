@@ -34,8 +34,8 @@ export class WinstonLogger implements LoggerService {
 
       return this.logger.error(msg, {
         context,
-        stack: [trace || message.stack],
-        value: message,
+        stack: [trace || stack || message.stack],
+        value: name + ":" + message,
         ...meta,
       })
     }

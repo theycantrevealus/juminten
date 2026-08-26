@@ -21,14 +21,21 @@ export class GeneralInterceptor<T> implements NestInterceptor<T, Response<T>> {
     @Inject(WINSTON_MODULE_PROVIDER)
     private readonly logger: Logger,
   ) {}
+
   async intercept(
     context: ExecutionContext,
     next: CallHandler<T>,
-  ): Promise<Observable<any>> {
-    if (context.getType() === "http") {
-      return await httpInterceptor(context, next, this.reflector, this.logger)
-    } else if (context.getType() === "rpc") {
-    } else if (context.getType() === "ws") {
-    }
+  ): Promise<Observable<Response<T>>> {
+    // if (context.getType() === "http") {
+    //   return await httpInterceptor(context, next, this.reflector, this.logger)
+    // } else if (context.getType() === "rpc") {
+    //   return null
+    // } else if (context.getType() === "ws") {
+    //   return null
+    // } else {
+    //   return null
+    // }
+
+    return await httpInterceptor(context, next, this.reflector, this.logger)
   }
 }

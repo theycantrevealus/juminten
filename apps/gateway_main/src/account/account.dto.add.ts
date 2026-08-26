@@ -1,52 +1,46 @@
-import {
-  IsDate,
-  IsEmail,
-  IsOptional,
-  IsPhoneNumber,
-  IsString,
-} from "class-validator"
+import { IsEmail, IsOptional, IsPhoneNumber, IsString } from "class-validator"
 
 export class DTOAccountAdd {
   @IsString()
-  user_id: string
+  user_id!: string
 
   @IsString()
-  core_role: string
+  core_role!: string
 
   @IsString()
-  user_name: string
+  user_name!: string
 
   @IsString()
-  first_name: string
+  first_name!: string
 
   @IsString()
-  last_name: string
+  last_name!: string
 
   @IsString()
-  job_title: string
+  job_title!: string
 
   @IsString()
-  job_level: string
+  job_level!: string
 
   @IsPhoneNumber()
-  phone: string
+  phone!: string
 
   @IsEmail()
-  email: string
+  email!: string
 
   @IsString()
-  status: string
+  status!: string
 
   @IsString()
   @IsOptional()
-  line_id: string
+  line_id?: string
 
   @IsString()
   type: string = "merchant"
 
   @IsString()
-  agent: string
+  agent?: string
 
   @IsString()
-  legacy_user_id: string
+  legacy_user_id?: string
 }

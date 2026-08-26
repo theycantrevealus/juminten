@@ -1,26 +1,21 @@
-import { Test, TestingModule } from "@nestjs/testing"
-import { CoreService } from "../service"
-import { HttpService } from "@nestjs/axios"
-import { ConfigService } from "@nestjs/config"
-import { of } from "rxjs"
-import { describe, it, expect, beforeEach, vi } from "vitest"
+import { describe, it, expect } from "vitest"
 
 describe("E2E Core Module Test", () => {
-  let coreService: CoreService
-  let httpService: HttpService
+  // let coreService: CoreService
+  // let httpService: HttpService
 
-  const mockAxiosRef = {
-    interceptors: {
-      request: { use: vi.fn() },
-      response: { use: vi.fn() },
-    },
-  }
+  // const mockAxiosRef = {
+  //   interceptors: {
+  //     request: { use: vi.fn() },
+  //     response: { use: vi.fn() },
+  //   },
+  // }
 
-  const mockHttpService = {
-    axiosRef: mockAxiosRef,
-    get: vi.fn(),
-    post: vi.fn(),
-  }
+  // const mockHttpService = {
+  //   axiosRef: mockAxiosRef,
+  //   get: vi.fn(),
+  //   post: vi.fn(),
+  // }
 
   // beforeEach(async () => {
   //   const module: TestingModule = await Test.createTestingModule({

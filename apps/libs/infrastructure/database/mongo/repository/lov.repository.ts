@@ -12,18 +12,18 @@ export class LOVRepositoryMongo implements Repository<LOV> {
     throw new Error("Method not implemented.")
   }
   findOne(id: string): Promise<LOV> {
-    throw new Error("Method not implemented.")
+    throw new Error(`Method not implemented. ${id}`)
   }
   create(entity: LOV): Promise<LOV> {
-    throw new Error("Method not implemented.")
+    throw new Error(`Method not implemented. ${entity}`)
   }
   update(id: string, entity: Partial<LOV>): Promise<LOV> {
-    throw new Error("Method not implemented.")
+    throw new Error(`Method not implemented. ${id} ${entity}`)
   }
   delete(id: string): Promise<void> {
-    throw new Error("Method not implemented.")
+    throw new Error(`Method not implemented. ${id}`)
   }
   deleteSoft(id: string): Promise<void> {
-    throw new Error("Method not implemented.")
+    throw new Error(`Method not implemented. ${id}`)
   }
 }

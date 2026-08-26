@@ -1,4 +1,4 @@
-import { BadRequestException, Inject, Injectable } from "@nestjs/common"
+import { BadRequestException, Injectable } from "@nestjs/common"
 import { CoreService } from "./service"
 import { CoreResponse } from "@shared/interface/core.response"
 import { ConfigService } from "@nestjs/config"

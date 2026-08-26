@@ -1,5 +1,4 @@
 import { QueryOptions } from "@database/couchbase/interface"
-import { boolean } from "joi"
 
 /**
  * Use this for universal prime data contract

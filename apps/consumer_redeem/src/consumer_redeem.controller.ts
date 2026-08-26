@@ -1,4 +1,4 @@
-import { Controller, Get, Inject, OnModuleInit } from "@nestjs/common"
+import { Controller, Inject, OnModuleInit } from "@nestjs/common"
 import { ConsumerRedeemService } from "./consumer_redeem.service"
 import { KafkaService } from "@module/kafka/service"
 import { KafkaTopic } from "@module/kafka/decorator"

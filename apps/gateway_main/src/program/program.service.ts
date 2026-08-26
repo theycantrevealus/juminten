@@ -12,7 +12,7 @@ export class ProgramService {
    * @returns { void }
    */
   async create(payload: DTOCreateProgram): Promise<void> {
-    //
+    console.log(payload)
   }
 
   async approve(): Promise<void> {}

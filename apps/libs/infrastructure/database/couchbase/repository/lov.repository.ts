@@ -59,7 +59,7 @@ export class LOVRepositoryCouchbase implements Repository<LOV> {
   }
 
   async findOne(id: string): Promise<LOV> {
-    throw new Error("Method not implemented.")
+    throw new Error(`Method not implemented. ${id}`)
   }
 
   async create(entity: LOV, id: string): Promise<LOV> {

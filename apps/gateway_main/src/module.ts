@@ -1,5 +1,4 @@
 import { Module } from "@nestjs/common"
-import { AccountModule } from "./account/account.module"
 import { ConfigModule, ConfigService } from "@nestjs/config"
 import { WinstonModule } from "@module/logger/module"
 import { environmentIdentifier, environmentName } from "@shared/environment"

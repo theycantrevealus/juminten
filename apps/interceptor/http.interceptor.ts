@@ -4,10 +4,8 @@ import {
   RequestTimeoutException,
 } from "@nestjs/common"
 import { Reflector } from "@nestjs/core"
-import { isExpressRequest } from "@util/http"
 import { catchError, tap, throwError, TimeoutError } from "rxjs"
 import { Logger } from "winston"
-import { FastifyRequest } from "fastify"
 import { PATH_METADATA } from "@nestjs/common/constants"
 import { GlobalResponse } from "@shared/interface/global.response"
 import { responseCode } from "@shared/response.code"
@@ -19,12 +17,12 @@ export async function httpInterceptor(
   logger: Logger,
 ) {
   const http = context.switchToHttp()
-  const request = http.getRequest()
+  // const request = http.getRequest()
   const response = http.getResponse()
   const path = reflector.get<string[]>(PATH_METADATA, context.getHandler())
-  const method = isExpressRequest(request)
-    ? request.method
-    : (request as FastifyRequest).method
+  // const method = isExpressRequest(request)
+  //   ? request.method
+  //   : (request as FastifyRequest).method
   return next.handle().pipe(
     catchError((err) => {
       if (err instanceof TimeoutError) {

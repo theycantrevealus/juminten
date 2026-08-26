@@ -1,30 +1,22 @@
-import { Test, TestingModule } from "@nestjs/testing"
-import { CoreService } from "../service"
-import { CoreOauthService } from "../oauth.service"
-import { HttpService } from "@nestjs/axios"
-import { ConfigService } from "@nestjs/config"
-import { CoreResponse } from "@shared/interface/core.response"
-import { BadRequestException } from "@nestjs/common"
-import { ContractSignIn } from "../contract/signin.contract"
-import { describe, it, expect, beforeEach, vi } from "vitest"
+import { describe, it, expect } from "vitest"
 
 describe("E2E Core OAuth Test", () => {
-  let coreService: CoreService
-  let coreOAuthService: CoreOauthService
-  let httpService: HttpService
+  // let coreService: CoreService
+  // let coreOAuthService: CoreOauthService
+  // let httpService: HttpService
 
-  const mockAxiosRef = {
-    interceptors: {
-      request: { use: vi.fn() },
-      response: { use: vi.fn() },
-    },
-  }
+  // const mockAxiosRef = {
+  //   interceptors: {
+  //     request: { use: vi.fn() },
+  //     response: { use: vi.fn() },
+  //   },
+  // }
 
-  const mockHttpService = {
-    axiosRef: mockAxiosRef,
-    get: vi.fn(),
-    post: vi.fn(),
-  }
+  // const mockHttpService = {
+  //   axiosRef: mockAxiosRef,
+  //   get: vi.fn(),
+  //   post: vi.fn(),
+  // }
 
   // beforeEach(async () => {
   //   const module: TestingModule = await Test.createTestingModule({

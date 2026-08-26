@@ -1,5 +1,5 @@
 import { HttpService } from "@nestjs/axios"
-import { Inject, Injectable, OnModuleInit } from "@nestjs/common"
+import { Inject, Injectable } from "@nestjs/common"
 import { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios"
 import { firstValueFrom } from "rxjs"
 import { Logger } from "winston"
