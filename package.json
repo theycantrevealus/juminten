@@ -1,5 +1,6 @@
 {
   "name": "Juminten - TERE Revamp",
+  "type": "module",
   "scripts": {
     "docs": "typedoc --entryPoints apps --out docs --tsconfig ./tsconfig.json",
     "prepack": "npm run build",
@@ -10,8 +11,8 @@
     "test:ui": "vitest --ui",
     "prepare": "husky",
     "release": "semantic-release",
-    "start:webpack:gateway_main": "nest build gateway_main --webpack --webpackPath ./webpack.config.js --watch",
-    "start:webpack:consumer_redeem": "nest build consumer_redeem --webpack --webpackPath ./webpack.config.js --watch",
+    "start:webpack:gateway_main": "nest build gateway_main --webpack --webpackPath ./webpack.config.cjs --watch",
+    "start:webpack:consumer_redeem": "nest build consumer_redeem --webpack --webpackPath ./webpack.config.cjs --watch",
     "lint": "oxlint",
     "lint:fix": "oxlint --fix"
   },

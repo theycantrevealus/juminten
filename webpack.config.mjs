@@ -1,8 +1,16 @@
-const path = require("path")
+import path from "path"
+import { fileURLToPath } from "url"
+import nodeExternals from "webpack-node-externals"
+import { RunScriptWebpackPlugin } from "run-script-webpack-plugin"
 
-module.exports = (options, webpack) => {
+// ESM equivalents for __dirname and __filename
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+
+export default (options, webpack) => {
   const modeCheck = process.env.NODE_ENV
   const identifierModule = options.output.filename.split("/")
+
   const option = {
     ...options,
     entry: [options.entry],
@@ -21,7 +29,7 @@ module.exports = (options, webpack) => {
           use: "imports-loader?define=>false",
         },
         {
-          test: /.tsx?$/,
+          test: /\.tsx?$/,
           use: "ts-loader",
           exclude: /node_modules/,
         },
@@ -42,8 +50,6 @@ module.exports = (options, webpack) => {
         },
       ],
     },
-    // watch: modeCheck === '' || modeCheck === 'development',
-    // mode: modeCheck !== '' ? 'development' : 'production',
     resolve: {
       modules: [path.resolve(__dirname), "node_modules"],
       alias: {
@@ -72,8 +78,6 @@ module.exports = (options, webpack) => {
 
   const modes = ["prod", "preprod"]
 
-  const nodeExternals = require("webpack-node-externals")
-  const { RunScriptWebpackPlugin } = require("run-script-webpack-plugin")
   if (modes.indexOf(modeCheck) < 0) {
     if (parseInt(process.env.NODE_BUILD_MODE) === 1) {
       option.externals.push(nodeExternals())
@@ -106,6 +110,7 @@ module.exports = (options, webpack) => {
   return option
 }
 
-if (module.hot) {
-  module.hot.accept()
+// Webpack ESM Hot Module Replacement check
+if (import.meta.webpackHot) {
+  import.meta.webpackHot.accept()
 }
