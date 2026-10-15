@@ -9,6 +9,8 @@ import { KafkaRedeemConfig } from "@configuration/kafka.redeem"
 import { environmentIdentifier, environmentName } from "@shared/environment"
 import { WinstonModule } from "@module/logger/module"
 import { WinstonCustomTransports } from "@module/logger/transport"
+import { ClientsModule, Transport } from "@nestjs/microservices"
+import { join } from "path"
 
 @Module({
   imports: [
@@ -30,6 +32,17 @@ import { WinstonCustomTransports } from "@module/logger/transport"
       },
       inject: [ConfigService],
     }),
+    ClientsModule.register([
+      {
+        name: "ELIGIBILITY_GRPC",
+        transport: Transport.GRPC,
+        options: {
+          package: "eligibility",
+          protoPath: join(__dirname, "../proto/eligibility.proto"),
+          url: "0.0.0.0:8501",
+        },
+      },
+    ]),
     KafkaModule.registerAsync(["REDEEM_SERVICE", "ELIGIBILITY_SERVICE"], {
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {

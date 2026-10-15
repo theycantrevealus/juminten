@@ -1,6 +1,9 @@
 {
   "compilerOptions": {
-    "types": ["vitest/globals", "node"],
+    "types": [
+      "vitest/globals",
+      "node"
+    ],
     "module": "commonjs",
     "declaration": true,
     "removeComments": true,
@@ -16,19 +19,47 @@
     "skipLibCheck": true,
     "incremental": true,
     "paths": {
-      "@configuration/*": ["./apps/configuration/*"],
-      "@decorator/*": ["./apps/decorator/*"],
-      "@guard/*": ["./apps/guard/*"],
-      "@integration/*": ["./apps/integration/*"],
-      "@database/*": ["./apps/libs/infrastructure/database/*"],
-      "@interceptor/*": ["./apps/interceptor/*"],
-      "@util/*": ["./apps/util/*"],
-      "@shared/*": ["./apps/libs/shared/*"],
-      "@module/*": ["./apps/libs/module/*"],
-      "@filter/*": ["./apps/filter/*"]
+      "@configuration/*": [
+        "./apps/configuration/*"
+      ],
+      "@database/*": [
+        "./apps/libs/infrastructure/database/*"
+      ],
+      "@decorator/*": [
+        "./apps/decorator/*"
+      ],
+      "@filter/*": [
+        "./apps/filter/*"
+      ],
+      "@guard/*": [
+        "./apps/guard/*"
+      ],
+      "@integration/*": [
+        "./apps/integration/*"
+      ],
+      "@interceptor/*": [
+        "./apps/interceptor/*"
+      ],
+      "@module/*": [
+        "./apps/libs/module/*"
+      ],
+      "@shared/*": [
+        "./apps/libs/shared/*"
+      ],
+      "@util/*": [
+        "./apps/util/*"
+      ]
     },
     "baseUrl": "./"
   },
-  "include": ["./apps/**/*.ts", "./libs/**/*.ts", "./k6/**/*.ts"],
-  "exclude": ["node_modules", "dist", "test"]
+  "include": [
+    "./apps/**/*.ts",
+    "./libs/**/*.ts",
+    "./k6/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "test"
+  ]
 }

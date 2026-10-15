@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package eligibility;
+
+service EligibilityService {
+  rpc EligibilityCheck (Transaction) returns (EligibilityResult) {}
+}
+
+message Transaction {
+  string transaction_id = 1;
+  string keyword = 2;
+  string msisdn = 3;
+}
+
+message EligibilityResult {
+  string transaction_id = 1;
+  string keyword = 2;
+  string msisdn = 3;
+  bool eligible = 4;
+}

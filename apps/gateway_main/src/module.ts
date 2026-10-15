@@ -1,4 +1,4 @@
-import { Module } from "@nestjs/common"
+import { Inject, Module } from "@nestjs/common"
 import { ConfigModule, ConfigService } from "@nestjs/config"
 import { WinstonModule } from "@module/logger/module"
 import { environmentIdentifier, environmentName } from "@shared/environment"
@@ -21,6 +21,9 @@ import { MongoConfig } from "@configuration/mongo"
 import { MongooseModule } from "@nestjs/mongoose"
 import { LOV } from "@database/schema/lov.schema"
 import { LovSchema } from "@database/mongo/schema/lov.schema"
+import { Logger } from "winston"
+import { WINSTON_MODULE_PROVIDER } from "@module/logger/constant"
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -41,8 +44,8 @@ import { LovSchema } from "@database/mongo/schema/lov.schema"
       ],
       validationSchema: ConfigSchema,
       validationOptions: {
-        allowUnknown: true,
-        abortEarly: true,
+        // allowUnknown: true,
+        // abortEarly: true,
       },
     }),
     CacheModule.register({ isGlobal: true }),
@@ -95,6 +98,10 @@ import { LovSchema } from "@database/mongo/schema/lov.schema"
         return [
           {
             provider: REPOSITORY_LOV,
+
+            // TODO : This symbol need to manage to support partial delivery requirement
+            // e.q. : REPOSITORY_LOV_MONGO, REPOSITORY_LOV_CB
+
             repository:
               db === "mongo" ? LOVRepositoryMongo : LOVRepositoryCouchbase,
             feature: {
@@ -116,4 +123,10 @@ import { LovSchema } from "@database/mongo/schema/lov.schema"
     LOVModule,
   ],
 })
-export class GatewayMainModule {}
+export class GatewayMainModule {
+  constructor(
+    @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
+  ) {
+    this.logger.debug("Application Start")
+  }
+}
