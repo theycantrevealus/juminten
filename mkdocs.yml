@@ -1,0 +1,42 @@
+site_name: JUMINTEN
+repo_url: https://github.com/theycantrevealus/juminten
+docs_dir: specs
+
+nav:
+  - Home: "index.md"
+  - System Config:
+      - System Config: "schema/system-config.md"
+      - LOV: "schema/lov.md"
+      - Location: "schema/location.md"
+      - Account: "schema/account.md"
+  - Business Config:
+      - Program: "schema/program.md"
+      - Keyword: "schema/keyword.md"
+  - Technical:
+      - Models:
+          - Master:
+              - Item: "models/master/item.md"
+          - Transaction: "models/transaction.md"
+
+extra_css:
+  - css/extra.css
+
+extra_javascript:
+  - javascripts/mermaid.mjs
+
+theme:
+  name: material
+  logo: logo.png
+
+plugins:
+  - search
+  - panzoom:
+      full_screen: true
+      key: "ctrl"
+
+markdown_extensions:
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
