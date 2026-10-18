@@ -1,0 +1,147 @@
+.md-nav--primary .md-nav__title {
+  color: #680106 !important;
+}
+
+.md-header {
+  background: #680106 !important;
+}
+
+.md-sidebar .md-sidebar__scrollwrap {
+  background: #fff;
+}
+
+.md-sidebar:first-child .md-sidebar__scrollwrap {
+  background: #f0f0f0 !important;
+}
+
+.wy-nav-content {
+  max-width: 100%;
+}
+.wy-side-scroll {
+  background: #680106;
+}
+
+.wy-side-nav-search {
+  background: #680106;
+}
+
+.md-nav__link.md-nav__link--active {
+  background: #680106 !important;
+  border-bottom: solid 3px #ccc !important;
+}
+
+.wy-menu-vertical li.toctree-l2.current > a,
+.wy-menu-vertical li.toctree-l2.current li.toctree-l3 > a {
+  background: #1b2d2a;
+  color: #fff;
+}
+
+.wy-menu-vertical li.current {
+  background: #32475b;
+}
+
+.wy-menu-vertical li.toctree-l2 a,
+.wy-menu-vertical li.toctree-l3 a,
+.wy-menu-vertical li.toctree-l4 a,
+.wy-menu-vertical li.toctree-l5 a,
+.wy-menu-vertical li.toctree-l6 a,
+.wy-menu-vertical li.toctree-l7 a,
+.wy-menu-vertical li.toctree-l8 a,
+.wy-menu-vertical li.toctree-l9 a,
+.wy-menu-vertical li.toctree-l10 a {
+  color: #fff;
+}
+
+.wy-menu-vertical li.current > a,
+.wy-menu-vertical li.on a {
+}
+
+.wy-menu-vertical li.current > a button.toctree-expand,
+.wy-menu-vertical li.on a button.toctree-expand {
+  color: #fff;
+}
+
+/*===================================================================================   MATERIAL*/
+@font-face {
+  font-family: "Fira Code";
+  src: url("../fonts/FiraCode/FiraMono-Regular.ttf");
+}
+
+@font-face {
+  font-family: "Roboto";
+  src: url("../fonts/Roboto/Roboto-Regular.ttf");
+}
+
+code {
+  font-family: "Fira Code", serif;
+  font-size: 8.5pt !important;
+  color: #b10046 !important;
+  background: #ffb4cb !important;
+  border-radius: 5px !important;
+  padding: 5px !important;
+}
+
+.md-header {
+  background: #007a43;
+}
+
+.md-container {
+  font-family: Roboto, serif;
+}
+
+.md-grid {
+  max-width: 100% !important;
+}
+
+.md-main__inner {
+  margin-top: 0 !important;
+}
+
+.md-sidebar {
+  padding: 0 0 1.2rem;
+}
+
+.md-sidebar__scrollwrap {
+  background: #1cb973;
+  padding-top: 1.2rem;
+  margin: 0 !important;
+}
+
+.md-nav__link {
+  padding: 10px 20px;
+  border-radius: 10px;
+}
+
+.md-nav__link.md-nav__link--active {
+  background: #179d60;
+  border-bottom: solid 3px #065c35;
+  color: #fff;
+}
+
+.md-nav--primary .md-nav__title {
+  color: #fff;
+  font-weight: bolder;
+  box-shadow: none;
+  background: transparent;
+}
+
+.md-nav--secondary .md-nav__title {
+  color: #fff;
+  font-weight: bolder;
+  box-shadow: none;
+  background: transparent;
+}
+
+.pz-wrapper {
+  min-height: 75vh !important; /* Responsive safety net: takes up at most 75% of the screen height */
+  overflow: hidden !important; /* Keeps the diagram cleanly inside the panzoom boundary */
+  position: relative;
+  border: 1px solid var(--md-typeset-color); /* Optional: clean boundary box */
+  border-radius: 4px;
+}
+
+/* 2. Fix the nested SVG so it spans the entire container space */
+.mermaid svg {
+  width: 100% !important;
+  height: 100% !important;
+}
