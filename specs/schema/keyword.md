@@ -5,7 +5,7 @@
 classDiagram
     direction LR
 
-    note for Keyword "Unique:<br>>reward_catalog.program<br>>reward_catalog.keyword<br>>eligibility.name"
+    note for Keyword "Unique:<br>reward_catalog.program<br>reward_catalog.keyword<br>eligibility.name"
 
     class Keyword {
         +ObjectId _id [PK]
