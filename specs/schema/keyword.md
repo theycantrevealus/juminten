@@ -5,7 +5,7 @@
 classDiagram
     direction LR
 
-    note for Keyword "Unique:\nreward_catalog.program\nreward_catalog.keyword\neligibility.name"
+    note for Keyword "Unique:<br>>reward_catalog.program<br>>reward_catalog.keyword<br>>eligibility.name"
 
     class Keyword {
         +ObjectId _id [PK]
@@ -14,13 +14,13 @@ classDiagram
         +KeywordBonus[] bonus
         +KeywordNotification[] notification [FK]
         +Lov keyword_approval [FK]
-        +Account hq_approver [FK]
-        +Account non_hq_approver [FK]
+        +IAccount hq_approver [FK]
+        +IAccount non_hq_approver [FK]
         +boolean is_draft
         +boolean is_stoped
         +boolean need_review_after_edit
-        +Keyword keyword_edit [FK]
-        +Account created_by [FK]
+        +IKeyword keyword_edit [FK]
+        +IAccount created_by [FK]
         +Date created_at
         +Date updated_at
         +Date deleted_at
@@ -100,6 +100,11 @@ classDiagram
         +SlRedisService:loadKeyword()
     }
 
+    class IKeyword:::subdocument {
+        +String _id_;
+        +String eligibility.name;
+    }
+
     class KeywordBonus {
         <<interface>>
     }
@@ -158,8 +163,6 @@ classDiagram
         +string flash_sale_banner_image
         +number voting_target_redeemer
         +object[] voting_options
-
-        %% banefit_category change to benefit_category
         +Lov banefit_category [FK]
         +number price_info
         +string url_merchant
@@ -236,7 +239,6 @@ classDiagram
         +string bcp_app_category
         +string bcp_app_category_operator
         +string imei_operator
-        +any created_by [FK]
         +Date created_at
         +Date updated_at
         +Date deleted_at
@@ -260,8 +262,8 @@ classDiagram
 
     class KeywordApprovalLog {
         +ObjectId _id [PK]
-        +Keyword keyword [FK]
-        +Account processed_by [FK]
+        +IKeyword keyword [FK]
+        +IAccount processed_by [FK]
         +Lov status [FK]
         +string reason
         +Date approved_at
@@ -279,7 +281,7 @@ classDiagram
 
     class KeywordNotification {
         +ObjectId _id [PK]
-        +Keyword keyword [FK]
+        +IKeyword keyword [FK]
         +Lov bonus_type_id [FK]
         +string keyword_name
         +string code_identifier
@@ -589,9 +591,9 @@ classDiagram
     Keyword "*" --> "0..1" KeywordEligibility : eligibility
     Keyword "1" --> "*" KeywordNotification : notification
     Keyword "*" --() "0..1" keyword_approval-Lov
-    Keyword "*" --() "0..1" hq_approver-Account
-    Keyword "*" --() "0..1" non_hq_approver-Account
-    Keyword "*" --() "1" created_by-Account
+    Keyword "*" --() "0..1" hq_approver-IAccount
+    Keyword "*" --() "0..1" non_hq_approver-IAccount
+    Keyword "*" --() "1" created_by-IAccount
     Keyword "*" --> "0..1" Keyword : keyword_edit
     Keyword "1" ..> "*" KeywordChild : child_keyword
 
@@ -634,21 +636,20 @@ classDiagram
     KeywordEligibility "1" --() "*" segmentation_customer_tier-CustomerTier
     KeywordEligibility "1" --() "*" segmentation_customer_most_redeem-CustomerBadge
     KeywordEligibility "1" --() "*" segmentation_customer_brand-CustomerBrand
-    KeywordEligibility "*" --() "0..1" created_by-Account
 
     KeywordEligibility "1" ..> "0..1" KeywordMaxRedeemTreshold : max_redeem_threshold
     KeywordEligibility "1" ..> "0..1" KeywordFlashSaleEligibility : flashsale
     KeywordEligibility "1" ..> "*" KeywordShift : keyword_shift
     KeywordEligibility "1" --() "*" channel_validation_list_info-Channel
 
-    KeywordApprovalLog "*" --> "0..1" Keyword : keyword
-    KeywordApprovalLog "*" --() "0..1" processed_by-Account
+    KeywordApprovalLog "*" --> "0..1" IKeyword : keyword
+    KeywordApprovalLog "*" --() "0..1" processed_by-IAccount
     KeywordApprovalLog "*" --() "0..1" status-Lov
 
     KeywordNotification "*" --> "0..1" NotificationTemplate : notification
     KeywordNotification "*" --() "0..1" via-Lov
 
-    MaxRedeemThresholds "*" ..> "0..1" Keyword : keyword_id
+    MaxRedeemThresholds "*" ..> "0..1" IKeyword : keyword_id
     MaxRedeemThresholds "*" --() "0..1" program-Program
 
     NotificationTemplate "*" --() "0..1" notif_type-Lov
@@ -683,3 +684,9 @@ classDiagram
     classDef takeout fill:#941919,stroke:#1d3d60,color:#fff;
     classDef untrack fill:#947b19,stroke:#1d3d60,color:#fff;
 ```
+
+## Note
+- `Account` wajib ada, tidak boleh null
+- Field `created_by` di `keyword.eligibility` tidak perlu ada, karena sudah diwakilkan di parent
+- Keyword field `keyword_edit` perlu bertanya dulu ke PIC terkait, apakah dibutuhkan keseluruhan object atau hanya interfacenya saja.
+- Change field `KeywordRewardCatalog.banefit_category` menjadi `KeywordRewardCatalog.benefit_category`
