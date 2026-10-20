@@ -500,6 +500,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Keyword
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -516,6 +534,36 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#note" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Note
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -769,6 +817,25 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#note" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Note
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -813,7 +880,7 @@
 classDiagram
     direction LR
 
-    note for Keyword "Unique:\nreward_catalog.program\nreward_catalog.keyword\neligibility.name"
+    note for Keyword "Unique:&lt;br&gt;reward_catalog.program&lt;br&gt;reward_catalog.keyword&lt;br&gt;eligibility.name"
 
     class Keyword {
         +ObjectId _id [PK]
@@ -822,13 +889,13 @@ classDiagram
         +KeywordBonus[] bonus
         +KeywordNotification[] notification [FK]
         +Lov keyword_approval [FK]
-        +Account hq_approver [FK]
-        +Account non_hq_approver [FK]
+        +IAccount hq_approver [FK]
+        +IAccount non_hq_approver [FK]
         +boolean is_draft
         +boolean is_stoped
         +boolean need_review_after_edit
-        +Keyword keyword_edit [FK]
-        +Account created_by [FK]
+        +IKeyword keyword_edit [FK]
+        +IAccount created_by [FK]
         +Date created_at
         +Date updated_at
         +Date deleted_at
@@ -908,6 +975,11 @@ classDiagram
         +SlRedisService:loadKeyword()
     }
 
+    class IKeyword:::subdocument {
+        +String _id_;
+        +String eligibility.name;
+    }
+
     class KeywordBonus {
         &lt;&lt;interface&gt;&gt;
     }
@@ -966,8 +1038,6 @@ classDiagram
         +string flash_sale_banner_image
         +number voting_target_redeemer
         +object[] voting_options
-
-        %% banefit_category change to benefit_category
         +Lov banefit_category [FK]
         +number price_info
         +string url_merchant
@@ -1044,14 +1114,13 @@ classDiagram
         +string bcp_app_category
         +string bcp_app_category_operator
         +string imei_operator
-        +any created_by [FK]
         +Date created_at
         +Date updated_at
         +Date deleted_at
         +any segmentation_customer_tier_info
         +any segmentation_telkomsel_employee
-        +string flash_sale_start_date
-        +string flash_sale_end_date
+        +Date flash_sale_start_date
+        +Date flash_sale_end_date
         +number flash_sale_poin
         +number flash_sale_quota
         +KeywordMaxRedeemTreshold max_redeem_threshold
@@ -1068,8 +1137,8 @@ classDiagram
 
     class KeywordApprovalLog {
         +ObjectId _id [PK]
-        +Keyword keyword [FK]
-        +Account processed_by [FK]
+        +IKeyword keyword [FK]
+        +IAccount processed_by [FK]
         +Lov status [FK]
         +string reason
         +Date approved_at
@@ -1087,7 +1156,7 @@ classDiagram
 
     class KeywordNotification {
         +ObjectId _id [PK]
-        +Keyword keyword [FK]
+        +IKeyword keyword [FK]
         +Lov bonus_type_id [FK]
         +string keyword_name
         +string code_identifier
@@ -1128,8 +1197,8 @@ classDiagram
         +string type
         +string[] date
         +string[] time
-        +string start_date
-        +string end_date
+        +Date start_date
+        +Date end_date
         +Date created_at
         +Date updated_at
         +Date deleted_at
@@ -1163,8 +1232,8 @@ classDiagram
         +boolean redeem_after_verification
         +string stock_type
         +number threshold
-        +string start_date
-        +string end_date
+        +Date start_date
+        +Date end_date
         +string[] hour
         +string flexibility
     }
@@ -1178,8 +1247,8 @@ classDiagram
         +boolean redeem_after_verification
         +string stock_type
         +number threshold
-        +string start_date
-        +string end_date
+        +Date start_date
+        +Date end_date
         +string[] hour
         +string flexibility
     }
@@ -1191,8 +1260,8 @@ classDiagram
         +boolean redeem_after_verification
         +string stock_type
         +number threshold
-        +string start_date
-        +string end_date
+        +Date start_date
+        +Date end_date
         +string[] hour
         +string flexibility
     }
@@ -1206,8 +1275,8 @@ classDiagram
         +KeywordStockLocation[] stock_location
         +string stock_type
         +number threshold
-        +string start_date
-        +string end_date
+        +Date start_date
+        +Date end_date
         +string[] hour
         +string flexibility
         +number bonus_quantity
@@ -1226,8 +1295,8 @@ classDiagram
         +KeywordStockLocation[] stock_location
         +string stock_type
         +number threshold
-        +string start_date
-        +string end_date
+        +Date start_date
+        +Date end_date
         +string[] hour
         +string flexibility
     }
@@ -1240,8 +1309,8 @@ classDiagram
         +boolean redeem_after_verification
         +string stock_type
         +number threshold
-        +string start_date
-        +string end_date
+        +Date start_date
+        +Date end_date
         +string[] hour
         +string flexibility
     }
@@ -1255,8 +1324,8 @@ classDiagram
         +boolean redeem_after_verification
         +string stock_type
         +number threshold
-        +string start_date
-        +string end_date
+        +Date start_date
+        +Date end_date
         +string[] hour
         +string flexibility
     }
@@ -1271,8 +1340,8 @@ classDiagram
         +boolean redeem_after_verification
         +string stock_type
         +number threshold
-        +string start_date
-        +string end_date
+        +Date start_date
+        +Date end_date
         +string[] hour
         +string flexibility
     }
@@ -1287,8 +1356,8 @@ classDiagram
         +boolean redeem_after_verification
         +string stock_type
         +number threshold
-        +string start_date
-        +string end_date
+        +Date start_date
+        +Date end_date
         +string[] hour
         +string flexibility
     }
@@ -1296,12 +1365,12 @@ classDiagram
     class KeywordLinkajaVoucher:::subdocument {
         +string bonus_type
         +string partner_voucher_id
-        +string expiry_date
+        +Date expiry_date
         +KeywordStockLocation[] stock_location
         +string stock_type
         +number threshold
-        +string start_date
-        +string end_date
+        +Date start_date
+        +Date end_date
         +string[] hour
         +string flexibility
     }
@@ -1313,8 +1382,8 @@ classDiagram
         +KeywordStockLocation[] stock_location
         +boolean redeem_after_verification
         +number threshold
-        +string start_date
-        +string end_date
+        +Date start_date
+        +Date end_date
         +string[] hour
         +string flexibility
     }
@@ -1330,8 +1399,8 @@ classDiagram
         +boolean redeem_after_verification
         +string stock_type
         +number threshold
-        +string start_date
-        +string end_date
+        +Date start_date
+        +Date end_date
         +string[] hour
         +string flexibility
     }
@@ -1346,8 +1415,8 @@ classDiagram
         +boolean redeem_after_verification
         +string stock_type
         +number threshold
-        +string start_date
-        +string end_date
+        +Date start_date
+        +Date end_date
         +string[] hour
         +string flexibility
     }
@@ -1364,8 +1433,8 @@ classDiagram
         +KeywordStockLocation[] stock_location
         +string stock_type
         +number threshold
-        +string start_date
-        +string end_date
+        +Date start_date
+        +Date end_date
         +string[] hour
     }
 
@@ -1378,8 +1447,8 @@ classDiagram
         +KeywordStockLocation[] stock_location
         +string stock_type
         +number threshold
-        +string start_date
-        +string end_date
+        +Date start_date
+        +Date end_date
         +string[] hour
     }
 
@@ -1397,9 +1466,9 @@ classDiagram
     Keyword "*" --&gt; "0..1" KeywordEligibility : eligibility
     Keyword "1" --&gt; "*" KeywordNotification : notification
     Keyword "*" --() "0..1" keyword_approval-Lov
-    Keyword "*" --() "0..1" hq_approver-Account
-    Keyword "*" --() "0..1" non_hq_approver-Account
-    Keyword "*" --() "1" created_by-Account
+    Keyword "*" --() "0..1" hq_approver-IAccount
+    Keyword "*" --() "0..1" non_hq_approver-IAccount
+    Keyword "*" --() "1" created_by-IAccount
     Keyword "*" --&gt; "0..1" Keyword : keyword_edit
     Keyword "1" ..&gt; "*" KeywordChild : child_keyword
 
@@ -1442,21 +1511,20 @@ classDiagram
     KeywordEligibility "1" --() "*" segmentation_customer_tier-CustomerTier
     KeywordEligibility "1" --() "*" segmentation_customer_most_redeem-CustomerBadge
     KeywordEligibility "1" --() "*" segmentation_customer_brand-CustomerBrand
-    KeywordEligibility "*" --() "0..1" created_by-Account
 
     KeywordEligibility "1" ..&gt; "0..1" KeywordMaxRedeemTreshold : max_redeem_threshold
     KeywordEligibility "1" ..&gt; "0..1" KeywordFlashSaleEligibility : flashsale
     KeywordEligibility "1" ..&gt; "*" KeywordShift : keyword_shift
     KeywordEligibility "1" --() "*" channel_validation_list_info-Channel
 
-    KeywordApprovalLog "*" --&gt; "0..1" Keyword : keyword
-    KeywordApprovalLog "*" --() "0..1" processed_by-Account
+    KeywordApprovalLog "*" --&gt; "0..1" IKeyword : keyword
+    KeywordApprovalLog "*" --() "0..1" processed_by-IAccount
     KeywordApprovalLog "*" --() "0..1" status-Lov
 
     KeywordNotification "*" --&gt; "0..1" NotificationTemplate : notification
     KeywordNotification "*" --() "0..1" via-Lov
 
-    MaxRedeemThresholds "*" ..&gt; "0..1" Keyword : keyword_id
+    MaxRedeemThresholds "*" ..&gt; "0..1" IKeyword : keyword_id
     MaxRedeemThresholds "*" --() "0..1" program-Program
 
     NotificationTemplate "*" --() "0..1" notif_type-Lov
@@ -1494,6 +1562,14 @@ classDiagram
 Hold "Ctrl" to enable pan &amp; zoom
 </div>
 </div>
+<h2 id="note">Note</h2>
+<ul>
+<li><code>Account</code> wajib ada, tidak boleh null</li>
+<li>Field <code>created_by</code> di <code>keyword.eligibility</code> tidak perlu ada, karena sudah diwakilkan di parent</li>
+<li>Keyword field <code>keyword_edit</code> perlu bertanya dulu ke PIC terkait, apakah dibutuhkan keseluruhan object atau hanya interfacenya saja.</li>
+<li>Change field <code>KeywordRewardCatalog.banefit_category</code> menjadi <code>KeywordRewardCatalog.benefit_category</code></li>
+<li>Semua field bertipe <code>date string</code>, diubah semuanya ke <code>Date</code> agar seragam</li>
+</ul>
 
 
 
