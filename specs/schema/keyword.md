@@ -244,8 +244,8 @@ classDiagram
         +Date deleted_at
         +any segmentation_customer_tier_info
         +any segmentation_telkomsel_employee
-        +string flash_sale_start_date
-        +string flash_sale_end_date
+        +Date flash_sale_start_date
+        +Date flash_sale_end_date
         +number flash_sale_poin
         +number flash_sale_quota
         +KeywordMaxRedeemTreshold max_redeem_threshold
@@ -322,8 +322,8 @@ classDiagram
         +string type
         +string[] date
         +string[] time
-        +string start_date
-        +string end_date
+        +Date start_date
+        +Date end_date
         +Date created_at
         +Date updated_at
         +Date deleted_at
@@ -357,8 +357,8 @@ classDiagram
         +boolean redeem_after_verification
         +string stock_type
         +number threshold
-        +string start_date
-        +string end_date
+        +Date start_date
+        +Date end_date
         +string[] hour
         +string flexibility
     }
@@ -372,8 +372,8 @@ classDiagram
         +boolean redeem_after_verification
         +string stock_type
         +number threshold
-        +string start_date
-        +string end_date
+        +Date start_date
+        +Date end_date
         +string[] hour
         +string flexibility
     }
@@ -385,8 +385,8 @@ classDiagram
         +boolean redeem_after_verification
         +string stock_type
         +number threshold
-        +string start_date
-        +string end_date
+        +Date start_date
+        +Date end_date
         +string[] hour
         +string flexibility
     }
@@ -400,8 +400,8 @@ classDiagram
         +KeywordStockLocation[] stock_location
         +string stock_type
         +number threshold
-        +string start_date
-        +string end_date
+        +Date start_date
+        +Date end_date
         +string[] hour
         +string flexibility
         +number bonus_quantity
@@ -420,8 +420,8 @@ classDiagram
         +KeywordStockLocation[] stock_location
         +string stock_type
         +number threshold
-        +string start_date
-        +string end_date
+        +Date start_date
+        +Date end_date
         +string[] hour
         +string flexibility
     }
@@ -434,8 +434,8 @@ classDiagram
         +boolean redeem_after_verification
         +string stock_type
         +number threshold
-        +string start_date
-        +string end_date
+        +Date start_date
+        +Date end_date
         +string[] hour
         +string flexibility
     }
@@ -449,8 +449,8 @@ classDiagram
         +boolean redeem_after_verification
         +string stock_type
         +number threshold
-        +string start_date
-        +string end_date
+        +Date start_date
+        +Date end_date
         +string[] hour
         +string flexibility
     }
@@ -465,8 +465,8 @@ classDiagram
         +boolean redeem_after_verification
         +string stock_type
         +number threshold
-        +string start_date
-        +string end_date
+        +Date start_date
+        +Date end_date
         +string[] hour
         +string flexibility
     }
@@ -481,8 +481,8 @@ classDiagram
         +boolean redeem_after_verification
         +string stock_type
         +number threshold
-        +string start_date
-        +string end_date
+        +Date start_date
+        +Date end_date
         +string[] hour
         +string flexibility
     }
@@ -490,12 +490,12 @@ classDiagram
     class KeywordLinkajaVoucher:::subdocument {
         +string bonus_type
         +string partner_voucher_id
-        +string expiry_date
+        +Date expiry_date
         +KeywordStockLocation[] stock_location
         +string stock_type
         +number threshold
-        +string start_date
-        +string end_date
+        +Date start_date
+        +Date end_date
         +string[] hour
         +string flexibility
     }
@@ -507,8 +507,8 @@ classDiagram
         +KeywordStockLocation[] stock_location
         +boolean redeem_after_verification
         +number threshold
-        +string start_date
-        +string end_date
+        +Date start_date
+        +Date end_date
         +string[] hour
         +string flexibility
     }
@@ -524,8 +524,8 @@ classDiagram
         +boolean redeem_after_verification
         +string stock_type
         +number threshold
-        +string start_date
-        +string end_date
+        +Date start_date
+        +Date end_date
         +string[] hour
         +string flexibility
     }
@@ -540,8 +540,8 @@ classDiagram
         +boolean redeem_after_verification
         +string stock_type
         +number threshold
-        +string start_date
-        +string end_date
+        +Date start_date
+        +Date end_date
         +string[] hour
         +string flexibility
     }
@@ -558,8 +558,8 @@ classDiagram
         +KeywordStockLocation[] stock_location
         +string stock_type
         +number threshold
-        +string start_date
-        +string end_date
+        +Date start_date
+        +Date end_date
         +string[] hour
     }
 
@@ -572,8 +572,8 @@ classDiagram
         +KeywordStockLocation[] stock_location
         +string stock_type
         +number threshold
-        +string start_date
-        +string end_date
+        +Date start_date
+        +Date end_date
         +string[] hour
     }
 
@@ -690,3 +690,4 @@ classDiagram
 - Field `created_by` di `keyword.eligibility` tidak perlu ada, karena sudah diwakilkan di parent
 - Keyword field `keyword_edit` perlu bertanya dulu ke PIC terkait, apakah dibutuhkan keseluruhan object atau hanya interfacenya saja.
 - Change field `KeywordRewardCatalog.banefit_category` menjadi `KeywordRewardCatalog.benefit_category`
+- Semua field bertipe `date string`, diubah semuanya ke `Date` agar seragam
