@@ -1,9 +1,9 @@
 # Channel Class
 
-mermaid
+```mermaid
 %%{ init: { 'flowchart': { 'curve': 'stepBefore' } } }%%
 classDiagram
-    direction LR
+direction LR
 
     note for Channel "Unique:\ncode"
 
@@ -51,3 +51,4 @@ classDiagram
     classDef subdocument fill:#00a666,stroke:#1d3d60,color:#fff;
     classDef takeout fill:#941919,stroke:#1d3d60,color:#fff;
     classDef untrack fill:#947b19,stroke:#1d3d60,color:#fff;
+```

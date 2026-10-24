@@ -17,6 +17,8 @@ classDiagram
     +String status
   }
 
+  Role "1" --() "1..*" role-Account
+
 
   classDef collection fill:#fff,stroke:#000,color:#000;
   classDef subdocument fill:#00a666,stroke:#1d3d60,color:#fff;
