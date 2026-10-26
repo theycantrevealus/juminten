@@ -10,6 +10,8 @@ nav:
       - Location: "schema/location.md"
       - Account: "schema/account.md"
       - Role: "schema/role.md"
+      - Bank: "schema/bank.md"
+      - Location Bucket: "schema/location.bucket.md"
       - Channel: "schema/channel.md"
       - Customer Brand: "schema/customer-brand.md"
       - Customer Badge: "schema/customer-badge.md"
