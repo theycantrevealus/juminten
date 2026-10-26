@@ -15,6 +15,7 @@ nav:
       - Channel: "schema/channel.md"
       - Customer Brand: "schema/customer-brand.md"
       - Customer Badge: "schema/customer-badge.md"
+      - Customer Tier: "schema/customer-tier.md"
   - Business Config:
       - Program: "schema/program.md"
       - Keyword: "schema/keyword.md"
